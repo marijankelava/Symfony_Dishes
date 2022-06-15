@@ -25,20 +25,12 @@ class Category
     private $slug;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Meal::class, mappedBy="category")
-     */
-    private $meals;
-
-    /**
      * @ORM\ManyToMany(targetEntity=Content::class, mappedBy="category")
      */
     private $contents;
 
-
     public function __construct()
     {
-        $this->meals = new ArrayCollection();
-        $this->languages = new ArrayCollection();
         $this->contents = new ArrayCollection();
     }
 
@@ -55,33 +47,6 @@ class Category
     public function setSlug(string $slug): self
     {
         $this->slug = $slug;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Meal[]
-     */
-    public function getMeals(): Collection
-    {
-        return $this->meals;
-    }
-
-    public function addMeal(Meal $meal): self
-    {
-        if (!$this->meals->contains($meal)) {
-            $this->meals[] = $meal;
-            $meal->addCategory($this);
-        }
-
-        return $this;
-    }
-
-    public function removeMeal(Meal $meal): self
-    {
-        if ($this->meals->removeElement($meal)) {
-            $meal->removeCategory($this);
-        }
 
         return $this;
     }
@@ -111,5 +76,5 @@ class Category
         }
 
         return $this;
-    }
+    }   
 }

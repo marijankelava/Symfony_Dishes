@@ -25,18 +25,12 @@ class Tag
     private $slug;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Meal::class, mappedBy="tag")
-     */
-    private $meals;
-
-    /**
-     * @ORM\ManyToMany(targetEntity=Content::class, mappedBy="Tags")
+     * @ORM\ManyToMany(targetEntity=Content::class, mappedBy="tags")
      */
     private $contents;
 
     public function __construct()
     {
-        $this->meals = new ArrayCollection();
         $this->contents = new ArrayCollection();
     }
 
@@ -53,33 +47,6 @@ class Tag
     public function setSlug(string $slug): self
     {
         $this->slug = $slug;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Meal[]
-     */
-    public function getMeals(): Collection
-    {
-        return $this->meals;
-    }
-
-    public function addMeal(Meal $meal): self
-    {
-        if (!$this->meals->contains($meal)) {
-            $this->meals[] = $meal;
-            $meal->addTag($this);
-        }
-
-        return $this;
-    }
-
-    public function removeMeal(Meal $meal): self
-    {
-        if ($this->meals->removeElement($meal)) {
-            $meal->removeTag($this);
-        }
 
         return $this;
     }

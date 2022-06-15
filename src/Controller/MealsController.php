@@ -43,8 +43,9 @@ class MealsController extends AbstractController
      */
     public function showMeal($id): Response
     {
-        $meal = $this->mealRepository->find($id);
-        $categories = $this->categoryRepository->findBy();
+        $meal = $this->contentRepository->find($id);
+        //$categories = $this->categoryRepository->findBy();
+        $categories = [];
 
         return $this->render('meal/show.html.twig', [
             'categories' => $categories,
@@ -61,13 +62,13 @@ class MealsController extends AbstractController
         
         //dd($parameters);
 
-        $meals = $this->contentRepository->getThoseMeals($parameters);
-        $categories = $this->categoryRepository->getAll();
+        $meals = $this->mealRepository->getMeals($parameters);
+        //$categories = $this->categoryRepository->getAll();
     
         //dd($categories);
 
         return $this->json([
-            'categories' => $categories,
+            //'categories' => $categories,
             'meals' => $meals
         ]);
     }

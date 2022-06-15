@@ -40,15 +40,10 @@ class MealRepository extends ServiceEntityRepository
     public function getMeals(array $parameters)
     {
         $qb = $this->createQueryBuilder('m');
+
+        $qb->leftJoin('m.content', 'c')
+           ->andWhere('m.id = entityId');
         
-        if (isset($parameters['tag'])) {
-            $qb->leftJoin('m.tags', 't')
-            ->andWhere('t.id IN (:id)')
-            ->setParameter('id', explode(',', $parameters['tag']));
-            /*if (isset($parameters['with_category'])) {
-                $qb->addSelect('c.title');
-            }*/
-        }
         return $qb->setMaxResults($parameters['per_page'])->setFirstResult(0)->getQuery()->getResult(Query::HYDRATE_ARRAY);
 
     }
@@ -58,58 +53,10 @@ class MealRepository extends ServiceEntityRepository
         $conn = $this->getEntityManager()->getConnection();
 
         // calculate offset
-        $offset = ((int) $parameters['page'] - 1) * (int) $parameters['per_page'];
+        //$offset = ((int) $parameters['page'] - 1) * (int) $parameters['per_page'];
 
         $lang = $parameters['lang'];
-        
-        switch ($lang) {
-            case "hr":
-                $sql = 'SELECT content.id, content.naslov_jela, content.opis_jela FROM content';
-                if (isset($parameters['category'])) {
-                    $sql .= ' LEFT JOIN meal_category ON content.id = meal_category.meal_id
-                    WHERE category_id = :category';
-                }
-                if (isset($parameters['tag'])) {
-                    $sql .= ' LEFT JOIN meal_tag ON content.meal_id = meal_tag.meal_id
-                    WHERE tag_id = :tag';
-                }
-                break;
-            
-            default:
-                /*if(isset($parameters['with'])) {
-                    $sql = 'WITH ingridient AS (SELECT ingridient.title FROM ingridient)';
-                }*/
-                $sql = 'SELECT meal.id, meal.title, meal.description FROM meal';
-                if (isset($parameters['category'])) {
-                    $sql .= ' LEFT JOIN meal_category ON meal.id = meal_id
-                    WHERE category_id = :category';
-                }
-                if (isset($parameters['tag'])) {
-                    $sql .= ' LEFT JOIN meal_tag ON meal.id = meal_tag.meal_id
-                    WHERE tag_id = :tag';
-                }
-                break;
-        }
-
-        $sql .= ' LIMIT :limit OFFSET :offset';
-        
-        $stmt = $conn->prepare($sql);
-
-        if (isset($parameters['category'])) {
-            $stmt->bindValue('category', $parameters['category']);
-        }
-
-        if(isset($parameters['tag'])){
-            $stmt->bindValue('tag', $parameters['tag']);
-        }
-
-        $stmt->bindValue('limit', $parameters['per_page'], \PDO::PARAM_INT);
-        $stmt->bindValue('offset', $offset, \PDO::PARAM_INT);
-
-        $resultSet = $stmt->executeQuery();
-    
-        return $resultSet->fetchAllAssociative();    
-    }
+    }   
 
     //Category controller function
     public function findByCategoryId(int $id)
@@ -123,29 +70,4 @@ class MealRepository extends ServiceEntityRepository
         
         return $qb->getQuery()->getResult();
     }
-
-    /*public function getThoseMeals($parameters)
-    {
-        $conn = $this->getEntityManager()->getConnection();
-
-        $sql = 'SELECT * FROM meal WHERE id = :id';
-        $stmt = $conn->prepare($sql);
-        $stmt->bindValue('id', $parameters['id']);
-        $resultSet = $stmt->executeQuery([]);
-
-        return $resultSet->fetchAllAssociative();
-        
-    }*/
-
-    /*
-    public function findOneBySomeField($value): ?Meals
-    {
-        return $this->createQueryBuilder('m')
-            ->andWhere('m.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

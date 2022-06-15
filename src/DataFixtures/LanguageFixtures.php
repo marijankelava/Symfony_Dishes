@@ -22,5 +22,8 @@ class LanguageFixtures extends Fixture
 
         $manager->flush();
 
+        $this->addReference('language_1', $language);
+        $this->addReference('language_2', $language2);
+
     }
 }

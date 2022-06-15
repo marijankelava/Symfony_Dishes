@@ -25,18 +25,12 @@ class Ingridient
     private $slug;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Meal::class, mappedBy="ingridient")
-     */
-    private $meals;
-
-    /**
      * @ORM\ManyToMany(targetEntity=Content::class, mappedBy="ingridients")
      */
     private $contents;
 
     public function __construct()
     {
-        $this->meals = new ArrayCollection();
         $this->contents = new ArrayCollection();
     }
 
@@ -53,33 +47,6 @@ class Ingridient
     public function setSlug(string $slug): self
     {
         $this->slug = $slug;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Meal[]
-     */
-    public function getMeals(): Collection
-    {
-        return $this->meals;
-    }
-
-    public function addMeal(Meal $meal): self
-    {
-        if (!$this->meals->contains($meal)) {
-            $this->meals[] = $meal;
-            $meal->addIngridient($this);
-        }
-
-        return $this;
-    }
-
-    public function removeMeal(Meal $meal): self
-    {
-        if ($this->meals->removeElement($meal)) {
-            $meal->removeIngridient($this);
-        }
 
         return $this;
     }

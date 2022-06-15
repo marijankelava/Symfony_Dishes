@@ -59,11 +59,23 @@ class Content
      */
     private $ingridients;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Language::class, inversedBy="contents")
+     */
+    private $languages;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Meal::class, inversedBy="contents")
+     */
+    private $meals;
+
     public function __construct()
     {
         $this->tags = new ArrayCollection();
         $this->category = new ArrayCollection();
         $this->ingridients = new ArrayCollection();
+        $this->languages = new ArrayCollection();
+        $this->meals = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -199,6 +211,54 @@ class Content
     public function removeIngridient(Ingridient $ingridient): self
     {
         $this->ingridients->removeElement($ingridient);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Language>
+     */
+    public function getLanguages(): Collection
+    {
+        return $this->languages;
+    }
+
+    public function addLanguage(Language $language): self
+    {
+        if (!$this->languages->contains($language)) {
+            $this->languages[] = $language;
+        }
+
+        return $this;
+    }
+
+    public function removeLanguage(Language $language): self
+    {
+        $this->languages->removeElement($language);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Meal>
+     */
+    public function getMeals(): Collection
+    {
+        return $this->meals;
+    }
+
+    public function addMeal(Meal $meal): self
+    {
+        if (!$this->meals->contains($meal)) {
+            $this->meals[] = $meal;
+        }
+
+        return $this;
+    }
+
+    public function removeMeal(Meal $meal): self
+    {
+        $this->meals->removeElement($meal);
 
         return $this;
     }

@@ -46,6 +46,7 @@ class ContentFixtures extends Fixture implements DependentFixtureInterface
             $content->setLanguageId(1);
             
             $data = [1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3];
+            $mealData = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
             $i++;
 
             $content->addTag($this->getReference('tag_' . $data[$i]));
@@ -54,6 +55,10 @@ class ContentFixtures extends Fixture implements DependentFixtureInterface
             $content->addIngridient($this->getReference('ingridient_' . ($i + 1)));
             $content->addIngridient($this->getReference('ingridient_' . ($i + 2)));
             $content->addIngridient($this->getReference('ingridient_' . ($i + 3)));
+
+            $content->addLanguage($this->getReference('language_1'));
+
+            $content->addMeal($this->getReference('meal_' . $mealData[$i]));
             
             $manager->persist($content);
 
@@ -78,6 +83,8 @@ class ContentFixtures extends Fixture implements DependentFixtureInterface
             $content->addIngridient($this->getReference('ingridient_' . ($i + 1)));
             $content->addIngridient($this->getReference('ingridient_' . ($i + 2)));
             $content->addIngridient($this->getReference('ingridient_' . ($i + 3)));
+
+            $content->addLanguage($this->getReference('language_2'));
             
             $manager->persist($content);
 
@@ -92,6 +99,8 @@ class ContentFixtures extends Fixture implements DependentFixtureInterface
             $content->setTitle('Category '.$category->getId().' EN');
             $content->setFqcn(Category::class);
             $content->setLanguageId(1);
+
+            $content->addLanguage($this->getReference('language_1'));
             
             $manager->persist($content);
 
@@ -104,6 +113,8 @@ class ContentFixtures extends Fixture implements DependentFixtureInterface
             $content->setTitle('Kategorija '.$category->getId().' HR');
             $content->setFqcn(Category::class);
             $content->setLanguageId(2);
+
+            $content->addLanguage($this->getReference('language_2'));
             
             $manager->persist($content);
 
@@ -118,6 +129,8 @@ class ContentFixtures extends Fixture implements DependentFixtureInterface
             $content->setTitle('Tag '.$tag->getId().' EN');
             $content->setFqcn(Tag::class);
             $content->setLanguageId(1);
+
+            $content->addLanguage($this->getReference('language_1'));
             
             $manager->persist($content);
 
@@ -130,6 +143,8 @@ class ContentFixtures extends Fixture implements DependentFixtureInterface
             $content->setTitle('Tag '.$tag->getId().' HR');
             $content->setFqcn(Tag::class);
             $content->setLanguageId(2);
+
+            $content->addLanguage($this->getReference('language_2'));
             
             $manager->persist($content);
 

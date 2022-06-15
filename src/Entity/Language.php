@@ -29,6 +29,16 @@ class Language
      */
     private $isoCode;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Content::class, mappedBy="languages")
+     */
+    private $contents;
+
+    public function __construct()
+    {
+        $this->contents = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -57,4 +67,31 @@ class Language
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Content>
+     */
+    public function getContents(): Collection
+    {
+        return $this->contents;
+    }
+
+    public function addContent(Content $content): self
+    {
+        if (!$this->contents->contains($content)) {
+            $this->contents[] = $content;
+            $content->addLanguage($this);
+        }
+
+        return $this;
+    }
+
+    public function removeContent(Content $content): self
+    {
+        if ($this->contents->removeElement($content)) {
+            $content->removeLanguage($this);
+        }
+
+        return $this;
+    }    
 }

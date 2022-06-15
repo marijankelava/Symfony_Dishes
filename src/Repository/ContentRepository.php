@@ -146,18 +146,31 @@ class ContentRepository extends ServiceEntityRepository
        return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
 
-    public function getThoseMeals(array $parameters)
+    /*public function getThoseMeals(array $parameters)
     {
         $qb = $this->createQueryBuilder('c');
-        
+
         if (isset($parameters['lang'])) {
             $qb->leftJoin('c.language', 'l')
                ->andWhere('c.id  :lang')
                ->setParameter('lang', $parameters['lang']);
-            /*if (isset($parameters['with_category'])) {
+            if (isset($parameters['with_category'])) {
                 $qb->addSelect('c.title');
-            }*/
+            }
         }
+        return $qb->setMaxResults($parameters['per_page'])->setFirstResult(0)->getQuery()->getResult(Query::HYDRATE_ARRAY);
+
+    }*/
+
+    public function getThoseMeals(array $parameters)
+    {
+        $qb = $this->createQueryBuilder('con')->select('con.title');
+        
+        if (isset($parameters['lang'])) {
+               $qb->andWhere('con.languageId = :lang')
+               ->setParameter('lang', $parameters['lang']);
+        }
+        
         return $qb->setMaxResults($parameters['per_page'])->setFirstResult(0)->getQuery()->getResult(Query::HYDRATE_ARRAY);
 
     }
