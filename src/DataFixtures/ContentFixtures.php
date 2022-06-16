@@ -37,6 +37,7 @@ class ContentFixtures extends Fixture implements DependentFixtureInterface
         $meals = $this->mealsRepository->findAll();
 
         $i = 0;
+        
         foreach ($meals as $meal) {
             $content = new Content();
             $content->setEntityId($meal->getId());
@@ -46,7 +47,7 @@ class ContentFixtures extends Fixture implements DependentFixtureInterface
             $content->setLanguageId(1);
             
             $data = [1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3];
-            $mealData = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
+            $mealData = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
             $i++;
 
             $content->addTag($this->getReference('tag_' . $data[$i]));
@@ -59,7 +60,7 @@ class ContentFixtures extends Fixture implements DependentFixtureInterface
             $content->addLanguage($this->getReference('language_1'));
 
             $content->addMeal($this->getReference('meal_' . $mealData[$i]));
-            
+            //dd($content);
             $manager->persist($content);
 
             $manager->flush();    
@@ -75,6 +76,7 @@ class ContentFixtures extends Fixture implements DependentFixtureInterface
             $content->setLanguageId(2);
 
             $data = [1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3];
+            $mealData = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
             $i++;
 
             $content->addTag($this->getReference('tag_' . $data[$i]));
@@ -85,6 +87,8 @@ class ContentFixtures extends Fixture implements DependentFixtureInterface
             $content->addIngridient($this->getReference('ingridient_' . ($i + 3)));
 
             $content->addLanguage($this->getReference('language_2'));
+
+            $content->addMeal($this->getReference('meal_' . $mealData[$i]));
             
             $manager->persist($content);
 
