@@ -29,9 +29,15 @@ class Category
      */
     private $contents;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Meal::class, mappedBy="category")
+     */
+    private $meals;
+
     public function __construct()
     {
         $this->contents = new ArrayCollection();
+        $this->meals = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -76,5 +82,32 @@ class Category
         }
 
         return $this;
-    }   
+    }
+    
+     /**
+     * @return Collection<int, Meal>
+     */
+    public function getMeals(): Collection
+    {
+        return $this->meals;
+    }
+
+    public function addMeal(Meal $meal): self
+    {
+        if (!$this->meals->contains($meal)) {
+            $this->meals[] = $meal;
+            $meal->addCategory($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMeal(Meal $meal): self
+    {
+        if ($this->contents->removeElement($meal)) {
+            $meal->removeCategory($this);
+        }
+
+        return $this;
+    }
 }

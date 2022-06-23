@@ -59,9 +59,17 @@ class MealsController extends AbstractController
     public function getMeals(Request $request) : JsonResponse
     {
         $parameters = $request->query->all();
+        $with = [];
+        if (isset($parameters['with'])){
+        $with = explode(',', $parameters['with']);
+        }
 
-        $meals = $this->mealRepository->getMeals($parameters);
+        //dd($parameters);
+
+        $meals = $this->mealRepository->getMeals($parameters, $with);
         //$categories = $this->categoryRepository->getAll();
+
+        dd($meals);
 
         return $this->json([
             //'categories' => $categories,

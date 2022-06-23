@@ -29,9 +29,15 @@ class Ingridient
      */
     private $contents;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Meal::class, mappedBy="ingridients")
+     */
+    private $meals;
+
     public function __construct()
     {
         $this->contents = new ArrayCollection();
+        $this->meals = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -73,6 +79,33 @@ class Ingridient
     {
         if ($this->contents->removeElement($content)) {
             $content->removeIngridient($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Meal>
+     */
+    public function getMeals(): Collection
+    {
+        return $this->meals;
+    }
+
+    public function addMeal(Meal $meal): self
+    {
+        if (!$this->meals->contains($meal)) {
+            $this->meals[] = $meal;
+            $meal->addIngridient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMeal(Meal $meal): self
+    {
+        if ($this->contents->removeElement($meal)) {
+            $meal->removeIngridient($this);
         }
 
         return $this;

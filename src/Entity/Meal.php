@@ -40,14 +40,32 @@ class Meal
     private $slug;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Content::class, mappedBy="meal")
+     * @ORM\ManyToMany(targetEntity=Content::class, mappedBy="meals")
      */
     private $contents;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Category::class, inversedBy="meals")
+     */
+    private $category;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Tag::class, inversedBy="meals")
+     */
+    private $tags;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Ingridient::class, inversedBy="meals")
+     */
+    private $ingridients;
 
     public function __construct()
     {
         $this->createdAt = new DateTimeImmutable();
         $this->contents = new ArrayCollection();
+        $this->category = new ArrayCollection();
+        $this->tags = new ArrayCollection();
+        $this->ingridients = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -128,5 +146,86 @@ class Meal
         }
 
         return $this;
-    }   
+    }
+    
+    /**
+     * @return Collection<int, Category>
+     */
+    public function getCategory(): Collection
+    {
+        return $this->category;
+    }
+
+    public function addCategory(Category $category): self
+    {
+        if (!$this->category->contains($category)) {
+            $this->category[] = $category;
+            $category->addMeal($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCategory(Category $category): self
+    {
+        if ($this->category->removeElement($category)) {
+            $category->removeMeal($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Tag>
+     */
+    public function getTags(): Collection
+    {
+        return $this->tags;
+    }
+
+    public function addTag(Tag $tag): self
+    {
+        if (!$this->tags->contains($tag)) {
+            $this->tags[] = $tag;
+            $tag->addMeal($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTag(Tag $tag): self
+    {
+        if ($this->tags->removeElement($tag)) {
+            $tag->removeMeal($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Ingridient>
+     */
+    public function getIngridients(): Collection
+    {
+        return $this->ingridients;
+    }
+
+    public function addIngridient(Ingridient $ingridient): self
+    {
+        if (!$this->ingridients->contains($ingridient)) {
+            $this->ingridients[] = $ingridient;
+            $ingridient->addMeal($this);
+        }
+
+        return $this;
+    }
+
+    public function removeIngridient(Ingridient $ingridient): self
+    {
+        if ($this->ingridients->removeElement($ingridient)) {
+            $ingridient->removeMeal($this);
+        }
+
+        return $this;
+    }
 }
