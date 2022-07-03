@@ -97,6 +97,8 @@ class ContentFixtures extends Fixture implements DependentFixtureInterface
 
         $categories = $this->categoryRepository->findAll();
 
+        $i = 0;
+
         foreach ($categories as $category) {
             $content = new Content();
             $content->setEntityId($category->getId());
@@ -104,12 +106,18 @@ class ContentFixtures extends Fixture implements DependentFixtureInterface
             $content->setFqcn(Category::class);
             $content->setLanguageId(1);
 
+            $data = [0, 1, 2, 3];
+            $i++;
+
             $content->addLanguage($this->getReference('language_1'));
+            $content->addCategory($this->getReference('category_'. $data[$i]));
             
             $manager->persist($content);
 
             $manager->flush();    
         }
+        
+        $i = 0;
 
         foreach ($categories as $category) {
             $content = new Content();
@@ -118,7 +126,11 @@ class ContentFixtures extends Fixture implements DependentFixtureInterface
             $content->setFqcn(Category::class);
             $content->setLanguageId(2);
 
+            $data = [0, 1, 2, 3];
+            $i++;
+
             $content->addLanguage($this->getReference('language_2'));
+            $content->addCategory($this->getReference('category_'. $data[$i]));
             
             $manager->persist($content);
 
@@ -127,6 +139,8 @@ class ContentFixtures extends Fixture implements DependentFixtureInterface
 
         $tags = $this->tagsRepository->findAll();
 
+        $i = 0;
+
         foreach ($tags as $tag) {
             $content = new Content();
             $content->setEntityId($tag->getId());
@@ -134,12 +148,18 @@ class ContentFixtures extends Fixture implements DependentFixtureInterface
             $content->setFqcn(Tag::class);
             $content->setLanguageId(1);
 
+            $data = [0, 1, 2, 3];
+            $i++;
+
             $content->addLanguage($this->getReference('language_1'));
+            $content->addTag($this->getReference('tag_'. $data[$i]));
             
             $manager->persist($content);
 
             $manager->flush();    
         }
+
+        $i = 0;
 
         foreach ($tags as $tag) {
             $content = new Content();
@@ -148,7 +168,11 @@ class ContentFixtures extends Fixture implements DependentFixtureInterface
             $content->setFqcn(Tag::class);
             $content->setLanguageId(2);
 
+            $data = [0, 1, 2, 3];
+            $i++;
+
             $content->addLanguage($this->getReference('language_2'));
+            $content->addTag($this->getReference('tag_'. $data[$i]));
             
             $manager->persist($content);
 

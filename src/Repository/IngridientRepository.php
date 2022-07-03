@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Ingridient;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\Query;
 
 /**
  * @method Ingridient|null find($id, $lockMode = null, $lockVersion = null)
@@ -47,4 +48,20 @@ class IngridientRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function getIngridients($parameters)
+    {
+        $lang = $parameters['lang'];
+        $val = "App\Entity\Content";
+
+        $qb = $this->createQueryBuilder('ing');
+
+        $qb->leftJoin('ing.contents', 'con')
+            ->addSelect('con.title');
+        /*$qb->leftJoin('cat.meals', 'm')
+           ->addSelect('cat')
+           ->distinct();*/       
+        
+        return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY); 
+    }
 }

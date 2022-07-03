@@ -174,4 +174,21 @@ class ContentRepository extends ServiceEntityRepository
         return $qb->setMaxResults($parameters['per_page'])->setFirstResult(0)->getQuery()->getResult(Query::HYDRATE_ARRAY);
 
     }
+
+    public function getContentTitle(array $parameters)
+    {
+        $val = "App\Entity\Category";
+        $qb = $this->createQueryBuilder('con')
+                   ->select('con.title')
+                   ->andWhere('con.fqcn = :val')
+                   ->setParameter('val', $val)
+                   ->leftJoin('con.category', 'cat')
+                   ->addSelect('cat.id', 'cat.slug');
+        if (isset($parameters['lang'])) {
+               $qb->andWhere('con.languageId = :lang')
+               ->setParameter('lang', $parameters['lang']);
+        }
+        
+        return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+    }
 }

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Repository\ContentRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\MealRepository;
+use App\Repository\IngridientRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,12 +17,14 @@ class MealsController extends AbstractController
     private $mealRepository;
     private $categoryRepository;
     private $contentRepository;
+    private $ingridientRepository;
 
-    public function __construct(MealRepository $mealRepository, CategoryRepository $categoryRepository, ContentRepository $contentRepository)
+    public function __construct(MealRepository $mealRepository, CategoryRepository $categoryRepository, ContentRepository $contentRepository, IngridientRepository $ingridientRepository)
     {
         $this->mealRepository = $mealRepository;
         $this->categoryRepository = $categoryRepository;
         $this->contentRepository = $contentRepository;
+        $this->ingridientRepository = $ingridientRepository;
     }
 
     /**
@@ -67,8 +70,9 @@ class MealsController extends AbstractController
         //dd($parameters);
 
         $meals = $this->mealRepository->getMeals($parameters, $with);
-        //$categories = $this->categoryRepository->getAll();
-
+        $categories = $this->categoryRepository->getCategory($parameters);
+        $contents = $this->contentRepository->getContentTitle($parameters);
+        $ingridients = $this->ingridientRepository->getIngridients($parameters);
         dd($meals);
 
         return $this->json([
