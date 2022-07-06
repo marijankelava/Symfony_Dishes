@@ -3,8 +3,6 @@
 namespace App\Repository;
 
 use App\Entity\Meal;
-use App\Entity\Content;
-use App\Entity\Category;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\Query;
@@ -39,6 +37,42 @@ class MealRepository extends ServiceEntityRepository
     }*/
     
     public function getMeals(array $parameters, ?array $with)
+    {
+        $qb = $this->createQueryBuilder('m');
+
+        $qb->leftJoin('m.contents', 'con')
+           ->addSelect('con.title, con.description')
+           ->orderBy('con.id', 'ASC');
+
+        if (isset($parameters['lang'])) {
+            $qb->andWhere('con.languageId = :lang')
+            ->setParameter('lang', $parameters['lang']);
+        }
+
+        $val = "App\Entity\Content";
+
+        if (in_array('category', $with)) {
+            $qb->leftJoin('m.category', 'cat')
+               ->addSelect('cat');
+            $qb->leftJoin('cat.contents', 'cont')
+               ->addSelect('cont.title')
+               ->andWhere('cat.id = cont.entityId');
+        }
+
+        if(in_array('tags', $with)) {
+            $qb->leftJoin('m.tags', 'tag')
+               ->addSelect('tag');
+        }
+
+        if(in_array('ingridients', $with)) {
+            $qb->leftJoin('m.ingridients', 'ing')
+               ->addSelect('ing');
+        }
+        
+    return $qb->setMaxResults($parameters['per_page'])->setFirstResult(0)->getQuery()->getResult(Query::HYDRATE_ARRAY);
+    }
+
+    public function getMeals2(array $parameters, ?array $with)
     {
         $qb = $this->createQueryBuilder('m');
 

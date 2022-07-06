@@ -52,56 +52,15 @@ class CategoryRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
 
-    public function getCategories($parameters)
-    {
-        $lang = $parameters['lang'];
-
-        $qb = $this->createQueryBuilder('cat');
-
-        $qb->leftJoin('cat.contents', 'con')
-           //->leftJoin('cat.meals', 'm')
-            ->addSelect('con.title')
-            ->andWhere('con.languageId = :lang')
-            ->setParameter('lang', $lang);
-        
-        return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
-    }
-
-    public function getCategoryTitle($parameters)
-    {
-        $lang = $parameters['lang'];
-        $val = "App\Entity\Content";
-
-        $qb = $this->createQueryBuilder('cat');
-
-        $qb->leftJoin('cat.contents', 'con')
-            ->addSelect('con.title')
-            ->andWhere('con.languageId = :lang')
-            ->setParameter('lang', $lang);
-            /*->andWhere('con.fqcn = :val')
-            ->setParameter('val', $val);*/
-
-        
-        return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY); 
-    }
-
     public function getCategory($parameters)
     {
         $lang = $parameters['lang'];
-        $val = "App\Entity\Content";
 
         $qb = $this->createQueryBuilder('cat');
 
         $qb->leftJoin('cat.contents', 'con')
             ->addSelect('con.title')
-            ->andWhere('cat.id = con.entityId');
-            /*->andWhere('con.languageId = :lang')
-            ->setParameter('lang', $lang)
-            ->andWhere('con.fqcn = :val')
-            ->setParameter('val', $val);
-        /*$qb->leftJoin('cat.meals', 'm')
-           ->addSelect('cat')
-           ->distinct();*/       
+            ->andWhere('cat.id = con.entityId');    
         
         return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY); 
     }

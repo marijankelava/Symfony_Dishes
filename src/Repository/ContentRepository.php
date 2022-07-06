@@ -75,22 +75,6 @@ class ContentRepository extends ServiceEntityRepository
     }
     */
 
-    public function getContent(array $parameters)
-    {
-        $qb = $this->createQueryBuilder('c');
-        
-        if (isset($parameters['lang'])) {
-            //$qb->leftJoin('c.language', 'l')
-            $qb->andWhere('c.id  :lang')
-            ->setParameter('lang', $parameters['lang']);
-            /*if (isset($parameters['with_category'])) {
-                $qb->addSelect('c.title');
-            }*/
-        }
-        return $qb->setMaxResults($parameters['per_page'])->setFirstResult(0)->getQuery()->getResult(Query::HYDRATE_ARRAY);
-
-    }
-
     public function getRawSqlMeals($parameters)
     {
         $conn = $this->getEntityManager()->getConnection();
@@ -144,35 +128,6 @@ class ContentRepository extends ServiceEntityRepository
             ->andWhere('con.id IN (29, 30, 31)');
        
        return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
-    }
-
-    /*public function getThoseMeals(array $parameters)
-    {
-        $qb = $this->createQueryBuilder('c');
-
-        if (isset($parameters['lang'])) {
-            $qb->leftJoin('c.language', 'l')
-               ->andWhere('c.id  :lang')
-               ->setParameter('lang', $parameters['lang']);
-            if (isset($parameters['with_category'])) {
-                $qb->addSelect('c.title');
-            }
-        }
-        return $qb->setMaxResults($parameters['per_page'])->setFirstResult(0)->getQuery()->getResult(Query::HYDRATE_ARRAY);
-
-    }*/
-
-    public function getThoseMeals(array $parameters)
-    {
-        $qb = $this->createQueryBuilder('con')->select('con.title');
-        
-        if (isset($parameters['lang'])) {
-               $qb->andWhere('con.languageId = :lang')
-               ->setParameter('lang', $parameters['lang']);
-        }
-        
-        return $qb->setMaxResults($parameters['per_page'])->setFirstResult(0)->getQuery()->getResult(Query::HYDRATE_ARRAY);
-
     }
 
     public function getContentTitle(array $parameters)

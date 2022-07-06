@@ -52,15 +52,12 @@ class IngridientRepository extends ServiceEntityRepository
     public function getIngridients($parameters)
     {
         $lang = $parameters['lang'];
-        $val = "App\Entity\Content";
 
         $qb = $this->createQueryBuilder('ing');
 
         $qb->leftJoin('ing.contents', 'con')
-            ->addSelect('con.title');
-        /*$qb->leftJoin('cat.meals', 'm')
-           ->addSelect('cat')
-           ->distinct();*/       
+            ->addSelect('con.title')
+            ->andWhere('ing.id = con.entityId');
         
         return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY); 
     }

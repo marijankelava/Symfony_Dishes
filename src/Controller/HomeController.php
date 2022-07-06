@@ -8,14 +8,16 @@ use App\Repository\MealRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\Request;
 
 class HomeController extends AbstractController
 {
     private $mealRepository;
     private $categoryRepository;
 
-    public function __construct(MealRepository $mealRepository, CategoryRepository $categoryRepository, ContentRepository $contentRepository)
+    public function __construct(
+        MealRepository $mealRepository, 
+        CategoryRepository $categoryRepository, 
+        ContentRepository $contentRepository)
     {
         $this->mealRepository = $mealRepository;
         $this->categoryRepository = $categoryRepository;

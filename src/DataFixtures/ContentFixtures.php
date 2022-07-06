@@ -13,6 +13,8 @@ use App\Repository\CategoryRepository;
 use App\Repository\TagRepository;
 use App\DataFixtures\MealFixtures;
 use App\DataFixtures\TagFixtures;
+use App\Entity\Ingridient;
+use App\Repository\IngridientRepository;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 class ContentFixtures extends Fixture implements DependentFixtureInterface
@@ -20,16 +22,19 @@ class ContentFixtures extends Fixture implements DependentFixtureInterface
     private $mealsRepository;
     private $categoryRepository;
     private $tagsRepository;
+    private $ingridientRepository;
 
     public function __construct(
         MealRepository $mealsRepository,
         CategoryRepository $categoryRepository,
-        TagRepository $tagsRepository
+        TagRepository $tagsRepository,
+        IngridientRepository $ingridientRepository
         )
     {
         $this->mealsRepository = $mealsRepository;
         $this->categoryRepository = $categoryRepository;
         $this->tagsRepository = $tagsRepository;
+        $this->ingridientRepository = $ingridientRepository;
     }
 
     public function load(ObjectManager $manager): void
@@ -173,6 +178,48 @@ class ContentFixtures extends Fixture implements DependentFixtureInterface
 
             $content->addLanguage($this->getReference('language_2'));
             $content->addTag($this->getReference('tag_'. $data[$i]));
+            
+            $manager->persist($content);
+
+            $manager->flush();    
+        }
+
+        $ingridients = $this->ingridientRepository->findAll();
+
+        $i = 0;
+
+        foreach ($ingridients as $ingridient) {
+            $content = new Content();
+            $content->setEntityId($ingridient->getId());
+            $content->setTitle('Ingridient '.$ingridient->getId().' EN');
+            $content->setFqcn(Ingridient::class);
+            $content->setLanguageId(1);
+
+            $data = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18];
+            $i++;
+
+            $content->addLanguage($this->getReference('language_1'));
+            $content->addIngridient($this->getReference('ingridient_' . $data[$i]));
+
+            $manager->persist($content);
+
+            $manager->flush();    
+        }
+
+        $i = 0;
+
+        foreach ($ingridients as $ingridient) {
+            $content = new Content();
+            $content->setEntityId($ingridient->getId());
+            $content->setTitle('Ingridient '.$ingridient->getId().' HR');
+            $content->setFqcn(Ingridient::class);
+            $content->setLanguageId(1);
+
+            $data = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18];
+            $i++;
+
+            $content->addLanguage($this->getReference('language_2'));
+            $content->addIngridient($this->getReference('ingridient_' . $data[$i]));
             
             $manager->persist($content);
 

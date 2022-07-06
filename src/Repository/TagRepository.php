@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Tag;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\Query;
 
 /**
  * @method Tag|null find($id, $lockMode = null, $lockVersion = null)
@@ -47,4 +48,17 @@ class TagRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function getTags($parameters)
+    {
+        $lang = $parameters['lang'];
+
+        $qb = $this->createQueryBuilder('tag');
+
+        $qb->leftJoin('tag.contents', 'con')
+            ->addSelect('con.title')
+            ->andWhere('tag.id = con.entityId');
+        
+        return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY); 
+    }
 }
