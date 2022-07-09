@@ -64,4 +64,27 @@ class CategoryRepository extends ServiceEntityRepository
         
         return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY); 
     }
+
+    public function getCategoryTitle($parameters, $with)
+    {
+        $lang = $parameters['lang'];
+
+        $qb = $this->createQueryBuilder('cat');
+
+        if (in_array('category', $with)) {
+            $qb->leftJoin('cat.meals', 'm')
+               ->addSelect('m');
+            $qb->leftJoin('cat.contents', 'cont')
+               ->select('cont.title')
+               ->andWhere('cat.id = cont.entityId')
+               ->orderBy('m.id', 'ASC');
+        }
+        
+        if (isset($parameters['lang'])) {
+            $qb->andWhere('cont.languageId = :lang')
+            ->setParameter('lang', $parameters['lang']);
+        }
+        
+        return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY); 
+    }
 }

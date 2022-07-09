@@ -54,9 +54,9 @@ class MealRepository extends ServiceEntityRepository
         if (in_array('category', $with)) {
             $qb->leftJoin('m.category', 'cat')
                ->addSelect('cat');
-            $qb->leftJoin('cat.contents', 'cont')
+            /*$qb->leftJoin('cat.contents', 'cont')
                ->addSelect('cont.title')
-               ->andWhere('cat.id = cont.entityId');
+               ->andWhere('cat.id = cont.entityId');*/
         }
 
         if(in_array('tags', $with)) {
@@ -75,21 +75,23 @@ class MealRepository extends ServiceEntityRepository
     public function getMeals2(array $parameters, ?array $with)
     {
         $qb = $this->createQueryBuilder('m');
+        //->select('m.id, m.createdAt');
 
         $qb->leftJoin('m.contents', 'con')
-           ->addSelect('con.title, con.description')
-           ->orderBy('con.id', 'ASC');
+           ->addSelect('con.title, con.description');
+           //->orderBy('con.id', 'ASC');
 
         if (isset($parameters['lang'])) {
             $qb->andWhere('con.languageId = :lang')
             ->setParameter('lang', $parameters['lang']);
         }
-
-        $val = "App\Entity\Content";
-
+        
         if (in_array('category', $with)) {
             $qb->leftJoin('m.category', 'cat')
                ->addSelect('cat');
+            /*$qb->leftJoin('cat.contents', 'cont')
+               ->select('cont.title')
+               ->andWhere('cat.id = cont.entityId');*/
         }
 
         if(in_array('tags', $with)) {

@@ -61,4 +61,27 @@ class TagRepository extends ServiceEntityRepository
         
         return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY); 
     }
+
+    public function getTagsTitle($parameters, $with)
+    {
+        $lang = $parameters['lang'];
+
+        $qb = $this->createQueryBuilder('tag');
+
+        if (in_array('tags', $with)) {
+            $qb->leftJoin('tag.meals', 'm')
+               ->addSelect('m');
+            $qb->leftJoin('tag.contents', 'cont')
+               ->select('cont.title')
+               ->andWhere('tag.id = cont.entityId')
+               ->orderBy('m.id', 'ASC');
+        }
+        
+        if (isset($parameters['lang'])) {
+            $qb->andWhere('cont.languageId = :lang')
+            ->setParameter('lang', $parameters['lang']);
+        }
+        
+        return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY); 
+    }
 }

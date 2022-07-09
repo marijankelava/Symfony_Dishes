@@ -130,20 +130,44 @@ class ContentRepository extends ServiceEntityRepository
        return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
 
-    public function getContentTitle(array $parameters)
+    public function getContentTitle(array $parameters, array $with)
     {
-        $val = "App\Entity\Category";
         $qb = $this->createQueryBuilder('con')
-                   ->select('con.title')
-                   ->andWhere('con.fqcn = :val')
-                   ->setParameter('val', $val)
-                   ->leftJoin('con.category', 'cat')
-                   ->addSelect('cat.id', 'cat.slug');
+                   ->leftJoin('con.meals', 'm')
+                   //->addSelect('m.title')
+                   ->andWhere('con.languageId = :lang')
+                   ->setParameter('lang', $parameters['lang']);
+                   
+
+                   /*if (isset($parameters['lang'])) {
+                    $qb->andWhere('con.languageId = :lang')
+                    ->setParameter('lang', $parameters['lang']);
+             }*/
+
+                if (in_array('category', $with)) {
+                    $qb->leftJoin('con.category', 'cat')
+                    ->addSelect('cat.id', 'cat.slug')
+                    ->addSelect('con.title');
+                }
+        
+                if(in_array('tags', $with)) {
+                    $qb->leftJoin('con.tags', 'tag')
+                       ->addSelect('tag.id', 'tag.slug')
+                       ->addSelect('con.title');
+                }
+        
+                /*if(in_array('ingridients', $with)) {
+                    $qb->leftJoin('con.ingridients', 'ing')
+                       ->addSelect('ing.id', 'ing.slug');
+                }
+        
         if (isset($parameters['lang'])) {
                $qb->andWhere('con.languageId = :lang')
                ->setParameter('lang', $parameters['lang']);
-        }
+        }*/
         
         return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
+
+
 }

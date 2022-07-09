@@ -61,4 +61,27 @@ class IngridientRepository extends ServiceEntityRepository
         
         return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY); 
     }
+
+    public function getIngridientsTitle($parameters, $with)
+    {
+        $lang = $parameters['lang'];
+
+        $qb = $this->createQueryBuilder('ing');
+
+        if (in_array('ingridients', $with)) {
+            $qb->leftJoin('ing.meals', 'm')
+               ->addSelect('m');
+            $qb->leftJoin('ing.contents', 'cont')
+               ->select('cont.title')
+               ->andWhere('ing.id = cont.entityId')
+               ->orderBy('m.id', 'ASC');
+        }
+        
+        if (isset($parameters['lang'])) {
+            $qb->andWhere('cont.languageId = :lang')
+            ->setParameter('lang', $parameters['lang']);
+        }
+        
+        return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY); 
+    }
 }
