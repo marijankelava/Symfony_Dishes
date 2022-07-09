@@ -78,8 +78,8 @@ class MealRepository extends ServiceEntityRepository
         //->select('m.id, m.createdAt');
 
         $qb->leftJoin('m.contents', 'con')
-           ->addSelect('con.title, con.description');
-           //->orderBy('con.id', 'ASC');
+           ->addSelect('con.title, con.description')
+           ->orderBy('m.id', 'ASC');
 
         if (isset($parameters['lang'])) {
             $qb->andWhere('con.languageId = :lang')
