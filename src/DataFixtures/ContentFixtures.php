@@ -57,10 +57,10 @@ class ContentFixtures extends Fixture implements DependentFixtureInterface
 
             $content->addTag($this->getReference('tag_' . $data[$i]));
             $content->addCategory($this->getReference('category_' . $data[$i]));
-            $content->addIngridient($this->getReference('ingridient_' . $i));
+            /*$content->addIngridient($this->getReference('ingridient_' . $i));
             $content->addIngridient($this->getReference('ingridient_' . ($i + 1)));
             $content->addIngridient($this->getReference('ingridient_' . ($i + 2)));
-            $content->addIngridient($this->getReference('ingridient_' . ($i + 3)));
+            $content->addIngridient($this->getReference('ingridient_' . ($i + 3)));*/
 
             $content->addLanguage($this->getReference('language_1'));
 
@@ -86,10 +86,10 @@ class ContentFixtures extends Fixture implements DependentFixtureInterface
 
             $content->addTag($this->getReference('tag_' . $data[$i]));
             $content->addCategory($this->getReference('category_' . $data[$i]));
-            $content->addIngridient($this->getReference('ingridient_' . $i));
+            /*$content->addIngridient($this->getReference('ingridient_' . $i));
             $content->addIngridient($this->getReference('ingridient_' . ($i + 1)));
             $content->addIngridient($this->getReference('ingridient_' . ($i + 2)));
-            $content->addIngridient($this->getReference('ingridient_' . ($i + 3)));
+            $content->addIngridient($this->getReference('ingridient_' . ($i + 3)));*/
 
             $content->addLanguage($this->getReference('language_2'));
 
@@ -213,7 +213,7 @@ class ContentFixtures extends Fixture implements DependentFixtureInterface
             $content->setEntityId($ingridient->getId());
             $content->setTitle('Ingridient '.$ingridient->getId().' HR');
             $content->setFqcn(Ingridient::class);
-            $content->setLanguageId(1);
+            $content->setLanguageId(2);
 
             $data = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18];
             $i++;
