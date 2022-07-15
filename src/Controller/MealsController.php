@@ -77,11 +77,15 @@ class MealsController extends AbstractController
 
         //dd($with);
 
-        $meals = $this->mealRepository->getMeals2($parameters, $with);
-        $categories = $this->categoryRepository->getCategoryTitle($parameters, $with);
+        $rawMeals = $this->mealRepository->getRawSqlMeals($parameters, $with);
+        $rawCategories = $this->categoryRepository->getRawCategories($parameters, $with);
+        $rawTags = $this->tagRepository->getRawTags($parameters, $with);
+        $rawIngridients = $this->ingridientRepository->getRawIngridients($parameters, $with);
+        //$meals = $this->mealRepository->getMeals2($parameters, $with);
+        //$categories = $this->categoryRepository->getCategoryTitle($parameters, $with);
         //$tags = $this->tagRepository->getTagsTitle($parameters, $with);
-        $ingridients = $this->ingridientRepository->getIngridientsTitle($parameters, $with);
-        dd($meals, $categories, $ingridients);
+        //$ingridients = $this->ingridientRepository->getIngridientsTitle($parameters, $with);
+        dd($rawMeals, $rawCategories, $rawTags, $rawIngridients);
 
         return $this->json([
             //'categories' => $categories,

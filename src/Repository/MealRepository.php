@@ -49,8 +49,6 @@ class MealRepository extends ServiceEntityRepository
             ->setParameter('lang', $parameters['lang']);
         }
 
-        $val = "App\Entity\Content";
-
         if (in_array('category', $with)) {
             $qb->leftJoin('m.category', 'cat')
                ->addSelect('cat');
@@ -75,7 +73,7 @@ class MealRepository extends ServiceEntityRepository
     public function getMeals2(array $parameters, ?array $with)
     {
         $qb = $this->createQueryBuilder('m');
-        //->select('m.id, m.createdAt');
+         //->select('m.id, m.createdAt');
 
         $qb->leftJoin('m.contents', 'con')
            ->addSelect('con.title, con.description')
@@ -89,9 +87,12 @@ class MealRepository extends ServiceEntityRepository
         if (in_array('category', $with)) {
             $qb->leftJoin('m.category', 'cat')
                ->addSelect('cat');
-            /*$qb->leftJoin('cat.contents', 'cont')
-               ->select('cont.title')
-               ->andWhere('cat.id = cont.entityId');*/
+            $qb->LeftJoin('cat.contents', 'cont')
+               ->addSelect('cont')
+               ->andWhere('cat.id = cont.entityId')
+               ->andWhere('cont.languageId = :lang')
+               ->setParameter('lang', $parameters['lang']);
+
         }
 
         if(in_array('tags', $with)) {
@@ -107,14 +108,52 @@ class MealRepository extends ServiceEntityRepository
     return $qb->setMaxResults($parameters['per_page'])->setFirstResult(0)->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
 
-    public function getRawSqlMeals($parameters)
+    public function getRawSqlMeals($parameters, $with)
     {
         $conn = $this->getEntityManager()->getConnection();
 
         // calculate offset
-        //$offset = ((int) $parameters['page'] - 1) * (int) $parameters['per_page'];
+        $offset = ((int) $parameters['page'] - 1) * (int) $parameters['per_page'];
 
-        $lang = $parameters['lang'];
+        $sql = 'SELECT meal.id, meal.created_at, content.title, content.description FROM meal';
+
+        $sql .= ' LEFT JOIN content_meal ON meal.id = content_meal.meal_id';
+
+        $sql .= ' LEFT JOIN content ON content.id = content_meal.content_id';
+
+        if (in_array('category', $with)) {
+            $sql .= ' LEFT JOIN meal_category ON meal.id = meal_category.meal_id';
+            $sql .= ' LEFT JOIN category ON category.id = meal_category.category_id';
+
+            //$sql .= ' LEFT JOIN content_category ON category.id = content_category.category_id';
+            //$sql .= ' LEFT JOIN content ON con.id = content_category.content_id';
+        }
+
+        /*if (in_array('tags', $with)) {
+            $sql .= ' LEFT JOIN meal_tag ON meal.id = meal_tag.meal_id';
+            $sql .= ' LEFT JOIN tag ON tag.id = meal_tag.tag_id';
+        }*/
+
+        if (isset($parameters['lang'])) {
+            $sql .= ' WHERE content.language_id = :lang';
+        }
+
+        $sql .= ' ORDER BY meal.id ASC';
+
+        $sql .= ' LIMIT :limit OFFSET :offset';
+
+        $stmt = $conn->prepare($sql);
+
+        if (isset($parameters['lang'])) {
+            $stmt->bindValue('lang', $parameters['lang']);
+        }
+
+        $stmt->bindValue('limit', $parameters['per_page'], \PDO::PARAM_INT);
+        $stmt->bindValue('offset', $offset, \PDO::PARAM_INT);
+
+        $resultSet = $stmt->executeQuery();
+    
+        return $resultSet->fetchAllAssociative();
     }   
 
     //Category controller function
