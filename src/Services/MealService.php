@@ -28,10 +28,18 @@ final class MealService
         if (isset($parameters['with'])){
         $with = explode(',', $parameters['with']);
         }
+        $itemsPerPage = (int) $parameters['per_page'];
+        $totalItems = $this->mealRepository->getMealsCount();
+        $offset = ((int) $parameters['page'] - 1) * (int) $parameters['per_page'];
+        $parameters['offset'] = $offset;
 
         $meals = $this->mealRepository->getMealsByCriteria($parameters, $with);
 
         $data = $this->mealTransformer->transformMeals($meals);
+
+        $data['meta']['totalItems'] = $totalItems;
+        $data['meta']['totalPages'] = ceil($totalItems / $itemsPerPage);
+        $data['currentItemsCount'] = count($data['data']);
 
         return $data;
     }
