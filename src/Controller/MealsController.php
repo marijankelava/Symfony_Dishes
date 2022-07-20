@@ -16,27 +16,17 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class MealsController extends AbstractController
 {
-    private $mealRepository;
-    private $categoryRepository;
     private $contentRepository;
-    private $ingridientRepository;
-    private $tagRepository;
     private $mealService;
 
     public function __construct(
         MealRepository $mealRepository, 
-        CategoryRepository $categoryRepository, 
         ContentRepository $contentRepository, 
-        IngridientRepository $ingridientRepository,
-        TagRepository $tagRepository,
         MealService $mealService
         )
     {
         $this->mealRepository = $mealRepository;
-        $this->categoryRepository = $categoryRepository;
         $this->contentRepository = $contentRepository;
-        $this->ingridientRepository = $ingridientRepository;
-        $this->tagRepository = $tagRepository;
         $this->mealService = $mealService;
     }
 
@@ -80,44 +70,5 @@ class MealsController extends AbstractController
         $data = $this->mealService->getMeals($parameters);
 
         return $this->json($data);
-    }
-
-    /**
-     * @Route("/api/meals/2", name="show2", methods={"GET"})
-     */
-    public function getMeals2(Request $request) : JsonResponse
-    {
-        $parameters = $request->query->all();
-        $with = [];
-        if (isset($parameters['with'])){
-        $with = explode(',', $parameters['with']);
-        }
-
-        //dd($with);
-
-        $meals = $this->mealRepository->getMeals2($parameters, $with);
-
-        $categories = [];
-        if (in_array('category', $with)) {
-            $categories = $this->categoryRepository->getCategory($parameters);
-        }
-
-        $tags = [];
-        if(in_array('tags', $with)) {
-            $tags = $this->tagRepository->getTags($parameters);
-        }
-
-        $ingridients = [];
-        if(in_array('ingridients', $with)) {
-            $ingridients = $this->ingridientRepository->getIngridients($parameters);
-        }
-
-        //$contents = $this->contentRepository->getContentTitle($parameters);
-        dd($meals, $categories, $tags, $ingridients);
-
-        return $this->json([
-            //'categories' => $categories,
-            'meals' => $meals
-        ]);
     }
 }
