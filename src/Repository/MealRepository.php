@@ -70,13 +70,12 @@ class MealRepository extends ServiceEntityRepository
     return $qb->setMaxResults($parameters['per_page'])->setFirstResult(0)->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
 
-    public function getMeals2(array $parameters, ?array $with)
+    public function getMealsByCriteria(array $parameters, ?array $with)
     {
         $qb = $this->createQueryBuilder('m');
-         //->select('m.id, m.createdAt');
 
         $qb->leftJoin('m.contents', 'con')
-           ->addSelect('con.title, con.description')
+           ->addSelect('m.id, m.createdAt, con.title, con.description')
            ->orderBy('m.id', 'ASC');
 
         if (isset($parameters['lang'])) {

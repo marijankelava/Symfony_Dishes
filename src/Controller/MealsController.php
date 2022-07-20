@@ -7,6 +7,7 @@ use App\Repository\CategoryRepository;
 use App\Repository\MealRepository;
 use App\Repository\IngridientRepository;
 use App\Repository\TagRepository;
+use App\Services\MealService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,19 +21,23 @@ class MealsController extends AbstractController
     private $contentRepository;
     private $ingridientRepository;
     private $tagRepository;
+    private $mealService;
 
     public function __construct(
         MealRepository $mealRepository, 
         CategoryRepository $categoryRepository, 
         ContentRepository $contentRepository, 
         IngridientRepository $ingridientRepository,
-        TagRepository $tagRepository)
+        TagRepository $tagRepository,
+        MealService $mealService
+        )
     {
         $this->mealRepository = $mealRepository;
         $this->categoryRepository = $categoryRepository;
         $this->contentRepository = $contentRepository;
         $this->ingridientRepository = $ingridientRepository;
         $this->tagRepository = $tagRepository;
+        $this->mealService = $mealService;
     }
 
     /**
@@ -69,27 +74,39 @@ class MealsController extends AbstractController
      */
     public function getMeals(Request $request) : JsonResponse
     {
+        
         $parameters = $request->query->all();
+
         $with = [];
         if (isset($parameters['with'])){
         $with = explode(',', $parameters['with']);
         }
+        $data = $this->mealService->getMeals();
 
-        //dd($with);
+        /*
+        $meals = $this->mealRepository->getMealsByCriteria($parameters, $with);
 
-        $rawMeals = $this->mealRepository->getRawSqlMeals($parameters, $with);
-        $rawCategories = $this->categoryRepository->getRawCategories($parameters, $with);
-        $rawTags = $this->tagRepository->getRawTags($parameters, $with);
-        $rawIngridients = $this->ingridientRepository->getRawIngridients($parameters, $with);
-        //$meals = $this->mealRepository->getMeals2($parameters, $with);
-        //$categories = $this->categoryRepository->getCategoryTitle($parameters, $with);
-        //$tags = $this->tagRepository->getTagsTitle($parameters, $with);
-        //$ingridients = $this->ingridientRepository->getIngridientsTitle($parameters, $with);
-        dd($rawMeals, $rawCategories, $rawTags, $rawIngridients);
+        $data = [];
+        foreach ($meals as $key => $meal) {
+            $data['data'][$key]['id'] = $meal['id'];    
+            $data['data'][$key]['title'] = $meal['title'];    
+            $data['data'][$key]['description'] = $meal['description']; 
+            $data['data'][$key]['category']['id'] = $meal[0]['category'][0]['id'];  
+            $data['data'][$key]['category']['title'] = $meal[0]['category'][0]['contents'][0]['title'];  
+            $data['data'][$key]['category']['slug'] = $meal[0]['category'][0]['slug']; 
+       
+            echo '<pre>';
+            print_r($data);
+            echo '</pre>';
+            die;
 
+        }
+        die;
+        dd($meals);
+*/
         return $this->json([
             //'categories' => $categories,
-            'meals' => $meals
+            $data
         ]);
     }
 
