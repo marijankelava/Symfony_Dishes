@@ -20,7 +20,7 @@ class MealRepository extends ServiceEntityRepository
         parent::__construct($registry, Meal::class);
     }
 
-    public function getMealsByCriteria(array $parameters, ?array $with)
+    public function getMealsByCriteria(array $parameters)
     {
         $qb = $this->createQueryBuilder('m');
 
@@ -33,7 +33,7 @@ class MealRepository extends ServiceEntityRepository
             ->setParameter('lang', $parameters['lang']);
         }
         
-        if (in_array('category', $with)) {
+        if (in_array('category', $parameters['with'])) {
             $qb->leftJoin('m.category', 'cat')
                ->addSelect('cat');
             $qb->LeftJoin('cat.contents', 'cont')
@@ -44,12 +44,12 @@ class MealRepository extends ServiceEntityRepository
 
         }
 
-        if(in_array('tags', $with)) {
+        if(in_array('tags', $parameters['with'])) {
             $qb->leftJoin('m.tags', 'tag')
                ->addSelect('tag');
         }
 
-        if(in_array('ingridients', $with)) {
+        if(in_array('ingridients', $parameters['with'])) {
             $qb->leftJoin('m.ingridients', 'ing')
                ->addSelect('ing');
         }

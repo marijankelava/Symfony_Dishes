@@ -23,18 +23,14 @@ final class MealService
 
     public function getMeals(array $parameters)
     {
-        $with = [];
 
-        if (isset($parameters['with'])){
-        $with = explode(',', $parameters['with']);
-        }
-        
         $itemsPerPage = (int) $parameters['per_page'];
         $totalItems = $this->mealRepository->getMealsCount();
         $offset = ((int) $parameters['page'] - 1) * (int) $parameters['per_page'];
         $parameters['offset'] = $offset;
+        $parameters['with'] = $this->_configureWithParameters($parameters);
 
-        $meals = $this->mealRepository->getMealsByCriteria($parameters, $with);
+        $meals = $this->mealRepository->getMealsByCriteria($parameters);
 
         $transformedMeals = $this->mealTransformer->transformMeals($meals);
 
@@ -45,5 +41,14 @@ final class MealService
         $data['data'] = $transformedMeals;
 
         return $data;
+    }
+
+    private function _configureWithParameters(array $parameters) : ?array
+    {
+
+        if (!isset($parameters['with'])){
+           return null; 
+        }
+        return explode(',', $parameters['with']);
     }
 }
