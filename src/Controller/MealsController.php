@@ -63,10 +63,8 @@ class MealsController extends AbstractController
      * @Route("/api/meals", name="show", methods={"GET"})
      */
     public function getMeals(Request $request) : JsonResponse
-    {
-        
+    {   
         $parameters = $request->query->all();
-
         $data = $this->mealService->getMeals($parameters);
 
         return $this->json($data);
