@@ -9,8 +9,8 @@ use App\Transformers\MealTransformer;
 final class MealService 
 {
 
-    private $mealRepository;
-    private $mealTransformer;
+    private MealRepository $mealRepository;
+    private MealTransformer $mealTransformer;
 
     public function __construct(
         MealRepository $mealRepository,
@@ -31,7 +31,7 @@ final class MealService
         $parameters['with'] = $this->_configureWithParameters($parameters);
 
         $meals = $this->mealRepository->getMealsByCriteria($parameters);
-
+        //dd($meals);
         $transformedMeals = $this->mealTransformer->transformMeals($meals);
 
         $data['meta']['currentPage'] = $parameters['page'];

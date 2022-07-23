@@ -93,7 +93,7 @@ class IngridientRepository extends ServiceEntityRepository
         $offset = ((int) $parameters['page'] - 1) * (int) $parameters['per_page'];
 
         if (in_array('ingridients', $with)) {
-            $sql = 'SELECT ingridient.id, ingridient.slug, content.title, meal.id FROM ingridient';
+            $sql = 'SELECT ingridient.id, ingridient.slug, meal.id FROM ingridient';
             $sql .= ' RIGHT JOIN meal_ingridient ON ingridient.id = meal_ingridient.ingridient_id';
             $sql .= ' RIGHT JOIN meal ON meal.id = meal_ingridient.meal_id';
             $sql .= ' LEFT JOIN content_ingridient ON ingridient.id = content_ingridient.ingridient_id';
@@ -126,5 +126,15 @@ class IngridientRepository extends ServiceEntityRepository
     
         return $resultSet->fetchAllAssociative();
         }
-    }   
+    }
+    
+    /*public function getMealsIngridients()
+    {
+        $qb = $this->createQueryBuilder('i');
+
+        $qb->leftJoin('i.meals', 'm',)
+            ->addSelect('m');
+        
+        return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+    }*/
 }

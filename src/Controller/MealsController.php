@@ -13,8 +13,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class MealsController extends AbstractController
 {
-    private $contentRepository;
-    private $mealService;
+    private ContentRepository $contentRepository;
+    private MealService $mealService;
 
     public function __construct(
         MealRepository $mealRepository, 
@@ -63,7 +63,7 @@ class MealsController extends AbstractController
     {   
         $parameters = $request->query->all();
         $data = $this->mealService->getMeals($parameters);
-
+        dd($data);
         return $this->json($data);
     }
 }

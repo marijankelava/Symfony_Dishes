@@ -9,8 +9,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class CategoryController extends AbstractController
 {
-    private $mealRepository;
-    private $categoryRepository;
+    private MealRepository $mealRepository;
+    private CategoryRepository $categoryRepository;
 
     public function __construct(
         MealRepository $mealRepository, 

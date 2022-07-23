@@ -20,6 +20,16 @@ class MealRepository extends ServiceEntityRepository
         parent::__construct($registry, Meal::class);
     }
 
+    /*public function getMealIngridients(array $parameters)
+    {
+        $qb = $this->createQueryBuilder('m');
+
+        $qb->LeftJoin('m.ingridients', 'ing')
+               ->addSelect('ing');
+
+               $qb->setMaxResults((int) $parameters['per_page'])->setFirstResult($parameters['offset'])->getQuery()->getResult(Query::HYDRATE_ARRAY);            
+    }*/
+
     public function getMealsByCriteria(array $parameters)
     {
         $qb = $this->createQueryBuilder('m');
@@ -47,11 +57,21 @@ class MealRepository extends ServiceEntityRepository
         if(in_array('tags', $parameters['with'])) {
             $qb->leftJoin('m.tags', 'tag')
                ->addSelect('tag');
+               $qb->LeftJoin('tag.contents', 'conte')
+               ->addSelect('conte')
+               ->andWhere('tag.id = conte.entityId')
+               ->andWhere('conte.languageId = :lang')
+               ->setParameter('lang', $parameters['lang']);
         }
 
         if(in_array('ingridients', $parameters['with'])) {
             $qb->leftJoin('m.ingridients', 'ing')
                ->addSelect('ing');
+               $qb->LeftJoin('ing.contents', 'content')
+               ->addSelect('content')
+               ->andWhere('ing.id = content.entityId')
+               ->andWhere('content.languageId = :lang')
+               ->setParameter('lang', $parameters['lang']);
         }
         
         return $qb->setMaxResults((int) $parameters['per_page'])->setFirstResult($parameters['offset'])->getQuery()->getResult(Query::HYDRATE_ARRAY);
