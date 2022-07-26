@@ -106,6 +106,7 @@ class MealRepository extends ServiceEntityRepository
         if(in_array('ingridients', $with)) {
             $qb->leftJoin('m.ingridients', 'ing')
                ->addSelect('ing');
+               //->andWhere('meal_id = meal_ingridient.meal_id');
         }
         
     return $qb->setMaxResults($parameters['per_page'])->setFirstResult(0)->getQuery()->getResult(Query::HYDRATE_ARRAY);
@@ -157,7 +158,45 @@ class MealRepository extends ServiceEntityRepository
         $resultSet = $stmt->executeQuery();
     
         return $resultSet->fetchAllAssociative();
+    }
+    
+    public function getRawSqlMeals2($parameters, $with)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+
+        // calculate offset
+        $offset = ((int) $parameters['page'] - 1) * (int) $parameters['per_page'];
+
+        $sql = 'SELECT meal.id, meal.slug, ingridient.slug  FROM meal';
+
+        //$sql .= ' LEFT JOIN meal ON meal:id = meal.ingridient.meal_id';
+
+        $sql .= ' LEFT JOIN meal_ingridient ON meal.id = meal_ingridient.meal_id';
+
+        $sql .= ' LEFT JOIN ingridient ON ingridient.id = meal_ingridient.ingridient_id';
+
+        /*if (isset($parameters['lang'])) {
+            $sql .= ' WHERE content.language_id = :lang';
+        }*/
+
+        $sql .= ' ORDER BY meal.id ASC';
+
+        $sql .= ' LIMIT :limit OFFSET :offset';
+
+        $stmt = $conn->prepare($sql);
+
+        /*if (isset($parameters['lang'])) {
+            $stmt->bindValue('lang', $parameters['lang']);
+        }*/
+
+        $stmt->bindValue('limit', $parameters['per_page'], \PDO::PARAM_INT);
+        $stmt->bindValue('offset', $offset, \PDO::PARAM_INT);
+
+        $resultSet = $stmt->executeQuery();
+    
+        return $resultSet->fetchAllAssociative();
     }   
+
 
     //Category controller function
     public function findByCategoryId(int $id)

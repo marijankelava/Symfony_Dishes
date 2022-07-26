@@ -128,7 +128,7 @@ class IngridientRepository extends ServiceEntityRepository
         }
     }
     
-    /*public function getMealsIngridients()
+    public function getMealsIngridients()
     {
         $qb = $this->createQueryBuilder('i');
 
@@ -136,5 +136,5 @@ class IngridientRepository extends ServiceEntityRepository
             ->addSelect('m');
         
         return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
-    }*/
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\IngridientRepository;
 use App\Repository\ContentRepository;
 use App\Repository\MealRepository;
 use App\Services\MealService;
@@ -15,16 +16,19 @@ class MealsController extends AbstractController
 {
     private ContentRepository $contentRepository;
     private MealService $mealService;
+    private IngridientRepository $ingridientRepository;
 
     public function __construct(
         MealRepository $mealRepository, 
         ContentRepository $contentRepository, 
-        MealService $mealService
+        MealService $mealService,
+        IngridientRepository $ingridientRepository
         )
     {
         $this->mealRepository = $mealRepository;
         $this->contentRepository = $contentRepository;
         $this->mealService = $mealService;
+        $this->ingridientRepository = $ingridientRepository;
     }
 
     /**
@@ -62,6 +66,9 @@ class MealsController extends AbstractController
     public function getMeals(Request $request) : JsonResponse
     {   
         $parameters = $request->query->all();
+        //$with = explode(',', $parameters['with']);
+        //$rawSqlMeals = $this->mealRepository->getRawSqlMeals2($parameters, $with);
+        //$getMeals = $this->mealRepository->getMeals($parameters, $with);
         $data = $this->mealService->getMeals($parameters);
         dd($data);
         return $this->json($data);
