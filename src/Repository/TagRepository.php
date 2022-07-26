@@ -84,47 +84,4 @@ class TagRepository extends ServiceEntityRepository
         
         return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY); 
     }
-
-    public function getRawTags($parameters, $with)
-    {
-        $conn = $this->getEntityManager()->getConnection();
-
-        // calculate offset
-        $offset = ((int) $parameters['page'] - 1) * (int) $parameters['per_page'];
-
-        if (in_array('tags', $with)) {
-            $sql = 'SELECT tag.id, tag.slug, content.title, meal.id FROM tag';
-            $sql .= ' RIGHT JOIN meal_tag ON tag.id = meal_tag.tag_id';
-            $sql .= ' RIGHT JOIN meal ON meal.id = meal_tag.meal_id';
-            $sql .= ' LEFT JOIN content_tag ON tag.id = content_tag.tag_id';
-            $sql .= ' LEFT JOIN content ON content.id = content_tag.content_id';
-        
-
-        /*if (in_array('category', $with)) {
-            $sql .= ' LEFT JOIN meal_category ON meal.id = meal_category.meal_id';
-            $sql .= ' LEFT JOIN category ON category.id = meal_category.category_id';
-        }*/
-
-        if (isset($parameters['lang'])) {
-            $sql .= ' WHERE content.language_id = :lang';
-        }
-
-        $sql .= ' ORDER BY meal.id ASC';
-
-        $sql .= ' LIMIT :limit OFFSET :offset';
-
-        $stmt = $conn->prepare($sql);
-
-        if (isset($parameters['lang'])) {
-            $stmt->bindValue('lang', $parameters['lang']);
-        }
-
-        $stmt->bindValue('limit', $parameters['per_page'], \PDO::PARAM_INT);
-        $stmt->bindValue('offset', $offset, \PDO::PARAM_INT);
-
-        $resultSet = $stmt->executeQuery();
-    
-        return $resultSet->fetchAllAssociative();
-        }
-    }   
 }

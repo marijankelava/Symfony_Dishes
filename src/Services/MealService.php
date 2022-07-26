@@ -47,7 +47,7 @@ final class MealService
     {
 
         if (!isset($parameters['with'])){
-           return null; 
+           return []; 
         }
         return explode(',', $parameters['with']);
     }
