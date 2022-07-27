@@ -66,12 +66,23 @@ class MealsController extends AbstractController
     public function getMeals(Request $request) : JsonResponse
     {   
         $parameters = $request->query->all();
-        //$id = $parameters['category'];
-        $id = explode(',', $parameters['category']);
-        //dd($id);
-        $categories = $this->mealRepository->findByCategoryId($parameters, $id);
+
+        if (isset($parameters['category'])) {
+            $categoryId = explode(',', $parameters['category']);
+            $categories = $this->mealRepository->findByCategoryId($parameters, $categoryId);  
+        }
+
+        if (isset($parameters['tag'])) {
+            $tagId = explode(',', $parameters['tag']);
+            $tag = $this->mealRepository->findByTagId($parameters, $tagId);  
+        }
+
+        //$categoryId = explode(',', $parameters['category']);
+        //$tagId = explode(',', $parameters['tag']);
+        //$categories = $this->mealRepository->findByCategoryId($parameters, $categoryId);
+        //$tag = $this->mealRepository->findByTagId($parameters, $tagId);
         //$data = $this->mealService->getMeals($parameters);
-        dd($categories);
+        dd($tag);
         return $this->json($data);
     }
 }
