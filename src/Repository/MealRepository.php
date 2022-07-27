@@ -161,16 +161,25 @@ class MealRepository extends ServiceEntityRepository
     }
     
     //Category controller function
-    public function findByCategoryId(int $id)
+    public function findByCategoryId($parameters, $id)
     {
         $qb = $this->createQueryBuilder('m');
 
+        $qb->leftJoin('m.contents', 'con')
+           ->addSelect('m.id, m.createdAt, con.title, con.description')
+           ->orderBy('m.id', 'ASC');
+
         $qb->leftJoin('m.category', 'cat',)
-            ->addSelect('cat')
-            ->andWhere('cat.id = :id')
+            //->addSelect('cat')
+            ->andWhere('cat.id IN (:id)')
             ->setParameter('id', $id);
+    
+            if (isset($parameters['lang'])) {
+                $qb->andWhere('con.languageId = :lang')
+                ->setParameter('lang', $parameters['lang']);
+            }
         
-        return $qb->getQuery()->getResult();
+        return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
 
     public function getMealsCount()
