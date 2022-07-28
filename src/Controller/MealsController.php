@@ -67,22 +67,47 @@ class MealsController extends AbstractController
     {   
         $parameters = $request->query->all();
 
-        if (isset($parameters['category'])) {
-            $categoryId = explode(',', $parameters['category']);
-            $categories = $this->mealRepository->findByCategoryId($parameters, $categoryId);  
-        }
-
-        if (isset($parameters['tag'])) {
-            $tagId = explode(',', $parameters['tag']);
-            $tag = $this->mealRepository->findByTagId($parameters, $tagId);  
-        }
-
-        //$categoryId = explode(',', $parameters['category']);
-        //$tagId = explode(',', $parameters['tag']);
-        //$categories = $this->mealRepository->findByCategoryId($parameters, $categoryId);
-        //$tag = $this->mealRepository->findByTagId($parameters, $tagId);
-        //$data = $this->mealService->getMeals($parameters);
-        dd($tag);
+        $data = $this->mealService->getMeals($parameters);
+        dd($data);
         return $this->json($data);
     }
+
+    /**
+     * @Route("api/meals/category", name="category", methods={"GET"})
+     */
+    /*public function getMealsByCategory(Request $request): JsonResponse
+    {
+        $parameters = $request->query->all();
+
+        $categories = [];
+        if (isset($parameters['category'])) {
+            $categoryId = explode(',', $parameters['category']);
+            $categories = $this->mealRepository->getMealsByCategory($parameters, $categoryId);  
+        }
+        dd($categories);
+
+        return $this->render('meal/show.html.twig', [
+            'categories' => $categories,
+            'meal' => $meal
+        ]);
+    }*/
+
+    /**
+     * @Route("api/meals/tags", name="tags", methods={"GET"})
+     */
+    /*public function getMealsByTags(Request $request): JsonResponse
+    {
+        $parameters = $request->query->all();
+
+        $tags = [];
+        if (isset($parameters['tags'])) {
+            $tagId = explode(',', $parameters['tags']);
+            $tags = $this->mealRepository->getMealsByTags($parameters, $tagId);  
+        }
+        dd($tags);
+        return $this->render('meal/show.html.twig', [
+            'categories' => $categories,
+            'meal' => $meal
+        ]);
+    }*/
 }

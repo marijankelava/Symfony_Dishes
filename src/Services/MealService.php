@@ -31,7 +31,7 @@ final class MealService
         $parameters['with'] = $this->_configureWithParameters($parameters);
 
         $meals = $this->mealRepository->getMealsByCriteria($parameters);
-        //dd($meals);
+        
         $transformedMeals = $this->mealTransformer->transformMeals($meals);
 
         $data['meta']['currentPage'] = $parameters['page'];

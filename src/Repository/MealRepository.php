@@ -37,8 +37,15 @@ class MealRepository extends ServiceEntityRepository
             $qb->leftJoin('m.category', 'cat')
                ->addSelect('cat');
             $qb->LeftJoin('cat.contents', 'cont')
-               ->addSelect('cont')
-               ->andWhere('cat.id = cont.entityId')
+               ->addSelect('cont');
+
+            if (isset($parameters['category'])) {
+                $categoryId = explode(',', $parameters['category']);
+                $qb->andWhere('cat.id IN (:id)')
+                   ->setParameter('id', $categoryId);
+            }
+            
+            $qb->andWhere('cat.id = cont.entityId')
                ->andWhere('cont.languageId = :lang')
                ->setParameter('lang', $parameters['lang']);
 
@@ -48,8 +55,15 @@ class MealRepository extends ServiceEntityRepository
             $qb->leftJoin('m.tags', 'tag')
                ->addSelect('tag');
                $qb->LeftJoin('tag.contents', 'conte')
-               ->addSelect('conte')
-               ->andWhere('tag.id = conte.entityId')
+               ->addSelect('conte');
+
+               if (isset($parameters['tags'])) {
+                $tagsId = explode(',', $parameters['tags']);
+                $qb->andWhere('tag.id IN (:id)')
+                   ->setParameter('id', $tagsId);
+            }
+
+            $qb->andWhere('tag.id = conte.entityId')
                ->andWhere('conte.languageId = :lang')
                ->setParameter('lang', $parameters['lang']);
         }
@@ -68,7 +82,7 @@ class MealRepository extends ServiceEntityRepository
     }
  
     //Category controller function
-    public function findByCategoryId($parameters, $categoryId)
+    public function getMealsByCategory($parameters, $categoryId)
     {
         $qb = $this->createQueryBuilder('m');
 
@@ -90,7 +104,7 @@ class MealRepository extends ServiceEntityRepository
     }
 
     //Tag controller function
-    public function findByTagId($parameters, $tagId)
+    public function getMealsByTags($parameters, $tagId)
     {
         $qb = $this->createQueryBuilder('m');
 
