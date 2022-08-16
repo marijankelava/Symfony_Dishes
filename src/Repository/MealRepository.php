@@ -89,22 +89,10 @@ class MealRepository extends ServiceEntityRepository
                ->andWhere('content.languageId = :lang')
                ->setParameter('lang', $parameters['lang']);
         }
-
-        if (!isset($parameters['per_page'])) {
-            $parameters['per_page'] = $this->getMealsCount();
-            //$parameters['per_page'] = 100;
-        }
-
-        /*if (!isset($parameters['offset'])) {
-            $parameters['offset'] = null;
-        }*/
         
-        $query = $qb->setMaxResults((int) $parameters['per_page'])->setFirstResult($parameters['offset'])->getQuery()->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+        $query = $qb->setMaxResults($parameters['limit'])->setFirstResult($parameters['offset'])->getQuery()->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
-        $paginator = new Paginator($query);
-        $result['data'] = $paginator->getIterator();
-        $result['total'] = $paginator->count();
-        return $result;
+        return $query;
     }
  
     //Category controller function

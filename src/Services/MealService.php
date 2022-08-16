@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Repository\MealRepository;
 use App\Transformers\MealTransformer;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 
 final class MealService 
 {
@@ -22,51 +23,44 @@ final class MealService
 
     public function getMeals(array $parameters)
     {
-        
-        if (!isset($parameters['per_page'])) {
-            $per_page = $this->mealRepository->getMealsCount();
-        } else{
-            $per_page = (int) $parameters['per_page'];
-        }
-        
-        $page = 1;
-        if (isset($parameters['page'])) {
-            $page = (int) $parameters['page'];
-        }
+        $parameters['limit'] = isset($parameters['per_page']) ? (int) $parameters['per_page'] : null;
+        $parameters['offset'] = isset($parameters['page']) && $parameters['limit'] !== null ? ((int) $parameters['page'] - 1) * $parameters['limit'] : null;        
 
-        $itemsPerPage = (int) $per_page;
-        $totalItems = $this->mealRepository->getMealsCount();
-        $offset = ((int) $page - 1) * (int) $per_page;
-        $parameters['offset'] = $offset;
-        $parameters['with'] = $this->_configureWithParameters($parameters);
+        $parameters['with'] = $this->_configureWithParameters($parameters['with'] ?? null);
 
-        /*$itemsPerPage = (int) $parameters['per_page'];
-        $totalItems = $this->mealRepository->getMealsCount();
-        $offset = ((int) $parameters['page'] - 1) * (int) $parameters['per_page'];
-        $parameters['offset'] = $offset;
-        $parameters['with'] = $this->_configureWithParameters($parameters);*/
+        $query = $this->mealRepository->getMealsByCriteria($parameters);
+        $paginator = $this->_paginate($query);
+        $totalItems = (int) $paginator['total'];
 
-        $paginatorResult = $this->mealRepository->getMealsByCriteria($parameters);
-        $meals = $paginatorResult['data']->getArrayCopy();
+        $itemsPerPage = $parameters['limit'] ?? $totalItems;
 
-        $transformedMeals = $this->mealTransformer->transformMeals($meals);
+        $transformedMeals = $this->mealTransformer->transformMeals($paginator['dataAsArray']);
 
-        $data['meta']['currentPage'] = $page;
-        //$data['meta']['currentPage'] = $parameters['page'];
+        $data['meta']['currentPage'] = $parameters['page'] ?? null;
         $data['meta']['totalItems'] = $totalItems;
         $data['meta']['itemsPerPage'] = $itemsPerPage;
-        $data['meta']['totalPages'] = ceil($totalItems / $itemsPerPage);
+        $data['meta']['totalPages'] = (int) ceil($totalItems / $itemsPerPage);
         $data['data'] = $transformedMeals;
 
         return $data;
     }
 
-    private function _configureWithParameters(array $parameters) : ?array
+    private function _paginate($query)
+    {
+        $paginator = new Paginator($query);
+        $result['data'] = $paginator->getIterator();
+        $result['dataAsArray'] = $result['data']->getArrayCopy(); 
+        $result['total'] = $paginator->count();
+
+        return $result;
+    }
+
+    private function _configureWithParameters(?string $param = null) : ?array
     {
 
-        if (!isset($parameters['with'])){
+        if ($param === null){
            return []; 
         }
-        return explode(',', $parameters['with']);
+        return explode(',', $param);
     }
 }
