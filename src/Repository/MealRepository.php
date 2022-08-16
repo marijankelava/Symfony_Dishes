@@ -6,6 +6,7 @@ use App\Entity\Meal;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\Query;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 
 /**
  * @method Meal|null find($id, $lockMode = null, $lockVersion = null)
@@ -18,6 +19,17 @@ class MealRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Meal::class);
+    }
+
+    public function getAllMeals()
+    {
+        $qb = $this->createQueryBuilder('m');
+
+        $qb->leftJoin('m.contents', 'con')
+           ->addSelect('m.id, con.title, con.description')
+           ->orderBy('m.id', 'ASC');
+
+        return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
 
     public function getMealsByCriteria(array $parameters)
@@ -36,7 +48,7 @@ class MealRepository extends ServiceEntityRepository
         if (in_array('category', $parameters['with'])) {
             $qb->leftJoin('m.category', 'cat')
                ->addSelect('cat');
-            $qb->LeftJoin('cat.contents', 'cont')
+            $qb->leftJoin('cat.contents', 'cont')
                ->addSelect('cont');
 
             if (isset($parameters['category'])) {
@@ -54,7 +66,7 @@ class MealRepository extends ServiceEntityRepository
         if(in_array('tags', $parameters['with'])) {
             $qb->leftJoin('m.tags', 'tag')
                ->addSelect('tag');
-               $qb->LeftJoin('tag.contents', 'conte')
+               $qb->leftJoin('tag.contents', 'conte')
                ->addSelect('conte');
 
                if (isset($parameters['tags'])) {
@@ -71,14 +83,28 @@ class MealRepository extends ServiceEntityRepository
         if(in_array('ingridients', $parameters['with'])) {
             $qb->leftJoin('m.ingridients', 'ing')
                ->addSelect('ing');
-               $qb->LeftJoin('ing.contents', 'content')
+               $qb->leftJoin('ing.contents', 'content')
                ->addSelect('content')
                ->andWhere('ing.id = content.entityId')
                ->andWhere('content.languageId = :lang')
                ->setParameter('lang', $parameters['lang']);
         }
+
+        if (!isset($parameters['per_page'])) {
+            $parameters['per_page'] = $this->getMealsCount();
+            //$parameters['per_page'] = 100;
+        }
+
+        /*if (!isset($parameters['offset'])) {
+            $parameters['offset'] = null;
+        }*/
         
-        return $qb->setMaxResults((int) $parameters['per_page'])->setFirstResult($parameters['offset'])->getQuery()->getResult(Query::HYDRATE_ARRAY);
+        $query = $qb->setMaxResults((int) $parameters['per_page'])->setFirstResult($parameters['offset'])->getQuery()->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+
+        $paginator = new Paginator($query);
+        $result['data'] = $paginator->getIterator();
+        $result['total'] = $paginator->count();
+        return $result;
     }
  
     //Category controller function

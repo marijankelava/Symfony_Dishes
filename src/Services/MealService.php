@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Repository\MealRepository;
 use App\Transformers\MealTransformer;
 
-
 final class MealService 
 {
 
@@ -23,18 +22,37 @@ final class MealService
 
     public function getMeals(array $parameters)
     {
+        
+        if (!isset($parameters['per_page'])) {
+            $per_page = $this->mealRepository->getMealsCount();
+        } else{
+            $per_page = (int) $parameters['per_page'];
+        }
+        
+        $page = 1;
+        if (isset($parameters['page'])) {
+            $page = (int) $parameters['page'];
+        }
 
-        $itemsPerPage = (int) $parameters['per_page'];
+        $itemsPerPage = (int) $per_page;
         $totalItems = $this->mealRepository->getMealsCount();
-        $offset = ((int) $parameters['page'] - 1) * (int) $parameters['per_page'];
+        $offset = ((int) $page - 1) * (int) $per_page;
         $parameters['offset'] = $offset;
         $parameters['with'] = $this->_configureWithParameters($parameters);
 
-        $meals = $this->mealRepository->getMealsByCriteria($parameters);
-        
+        /*$itemsPerPage = (int) $parameters['per_page'];
+        $totalItems = $this->mealRepository->getMealsCount();
+        $offset = ((int) $parameters['page'] - 1) * (int) $parameters['per_page'];
+        $parameters['offset'] = $offset;
+        $parameters['with'] = $this->_configureWithParameters($parameters);*/
+
+        $paginatorResult = $this->mealRepository->getMealsByCriteria($parameters);
+        $meals = $paginatorResult['data']->getArrayCopy();
+
         $transformedMeals = $this->mealTransformer->transformMeals($meals);
 
-        $data['meta']['currentPage'] = $parameters['page'];
+        $data['meta']['currentPage'] = $page;
+        //$data['meta']['currentPage'] = $parameters['page'];
         $data['meta']['totalItems'] = $totalItems;
         $data['meta']['itemsPerPage'] = $itemsPerPage;
         $data['meta']['totalPages'] = ceil($totalItems / $itemsPerPage);

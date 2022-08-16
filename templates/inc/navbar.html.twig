@@ -13,6 +13,7 @@
             <li class="nav-item">
                 <a href="/meals" class="nav-link">Meals</a> 
             </li>
+            {#}
             {% if categories is defined %}
                 {% for category in categories %}
                 <li class="nav-item">
@@ -20,6 +21,7 @@
                 </li>
                 {% endfor %}
             {% endif %}
+            #}
         </ul>
     </div>
 </div>

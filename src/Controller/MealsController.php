@@ -34,11 +34,15 @@ class MealsController extends AbstractController
     /**
      * @Route("/meals", name="meals", defaults={"name" = null}, methods={"GET", "HEAD"})
      */
-    public function index(): Response
+    public function index(Request $request): Response
     {
-        $meals = $this->contentRepository->findBy(["fqcn" => "App\Entity\Meal"]);
-        $categories = $this->contentRepository->showCategories();
-        //$categories = [];
+        $parameters = $request->query->all();
+
+        $meals = $this->mealRepository->getAllMeals();
+
+        //$meals = $this->contentRepository->findBy(["fqcn" => "App\Entity\Meal"]);
+        //$categories = $this->contentRepository->showCategories();
+        $categories = [];
         return $this->render('meal/index.html.twig', [
             'categories' => $categories,
             'meals' => $meals

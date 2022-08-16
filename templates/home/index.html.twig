@@ -14,9 +14,25 @@
             <!--<span class="font-light text-gray-500 italic">
                 Created by ...
             </span>-->
-            <span class="font-light text-gray-500 italic">
-                Please enter your query...
-            </span>
+            <h5 class="font-light text-gray-500 italic">
+                Please enter your query in the following manner...
+            </h5>
+            <h6 style="line-height: 80px">
+                http://localhost:8888/api/meals?per_page=100&page=1&lang=2&with=category,tags,ingridients
+            </h6>
+                <ul style="list-style: none; line-height: 35px">
+                    <li>- parameter 'per page' controls number of returned results</li>
+                    <li>- parameter 'page' controls pagination</li>
+                    <li>- parameter 'lang' controls language</li>
+                    <li>- parameter 'with' controls returned results content</li>
+                    <li></li>
+                </ul>
+            <h5 class="font-light text-gray-500 italic">
+                Limiting search results by category or tags or both parameters... 
+            </h5>
+            <h6 style="line-height: 80px">
+                http://localhost:8888/api/meals?category=1,2&tags=1,2&per_page=100&page=1&lang=2&with=category,tags,ingridients
+            </h6>    
         </div>
     </div>
 
