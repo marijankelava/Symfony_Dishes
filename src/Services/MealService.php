@@ -29,6 +29,7 @@ final class MealService
         $parameters['with'] = $this->_configureWithParameters($parameters['with'] ?? null);
 
         $query = $this->mealRepository->getMealsByCriteria($parameters);
+        // $pagination = $this->paginator->paginate($query);
         $paginator = $this->_paginate($query);
         $totalItems = (int) $paginator['total'];
 

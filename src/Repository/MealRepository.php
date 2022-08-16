@@ -6,7 +6,6 @@ use App\Entity\Meal;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\Query;
-use Doctrine\ORM\Tools\Pagination\Paginator;
 
 /**
  * @method Meal|null find($id, $lockMode = null, $lockVersion = null)
@@ -32,7 +31,7 @@ class MealRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
 
-    public function getMealsByCriteria(array $parameters)
+    public function getMealsByCriteria(array $parameters) : Query
     {
         $qb = $this->createQueryBuilder('m');
 
@@ -95,7 +94,6 @@ class MealRepository extends ServiceEntityRepository
         return $query;
     }
  
-    //Category controller function
     public function getMealsByCategory($parameters, $categoryId)
     {
         $qb = $this->createQueryBuilder('m');
@@ -117,7 +115,6 @@ class MealRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
 
-    //Tag controller function
     public function getMealsByTags($parameters, $tagId)
     {
         $qb = $this->createQueryBuilder('m');
