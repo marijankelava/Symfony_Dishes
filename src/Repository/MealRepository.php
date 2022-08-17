@@ -20,7 +20,7 @@ class MealRepository extends ServiceEntityRepository
         parent::__construct($registry, Meal::class);
     }
 
-    public function getAllMeals()
+    /*public function getAllMeals()
     {
         $qb = $this->createQueryBuilder('m');
 
@@ -29,7 +29,7 @@ class MealRepository extends ServiceEntityRepository
            ->orderBy('m.id', 'ASC');
 
         return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
-    }
+    }*/
 
     public function getMealsByCriteria(array $parameters) : Query
     {
@@ -93,8 +93,16 @@ class MealRepository extends ServiceEntityRepository
 
         return $query;
     }
+
+    public function getMealsCount()
+    {
+        return $this->createQueryBuilder('m')
+        ->select('count(m.id)')
+        ->getQuery()
+        ->getSingleScalarResult();
+    }
  
-    public function getMealsByCategory($parameters, $categoryId)
+    /*public function getMealsByCategory($parameters, $categoryId)
     {
         $qb = $this->createQueryBuilder('m');
 
@@ -113,9 +121,9 @@ class MealRepository extends ServiceEntityRepository
             }
         
         return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
-    }
+    }*/
 
-    public function getMealsByTags($parameters, $tagId)
+    /*public function getMealsByTags($parameters, $tagId)
     {
         $qb = $this->createQueryBuilder('m');
 
@@ -134,13 +142,5 @@ class MealRepository extends ServiceEntityRepository
             }
         
         return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
-    }
-
-    public function getMealsCount()
-    {
-        return $this->createQueryBuilder('m')
-        ->select('count(m.id)')
-        ->getQuery()
-        ->getSingleScalarResult();
-    }
+    }*/
 }

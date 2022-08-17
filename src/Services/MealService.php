@@ -5,20 +5,24 @@ namespace App\Services;
 use App\Repository\MealRepository;
 use App\Transformers\MealTransformer;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use App\Services\PaginatorService;
 
 final class MealService 
 {
 
     private MealRepository $mealRepository;
     private MealTransformer $mealTransformer;
+    private PaginatorService $paginator;
 
     public function __construct(
         MealRepository $mealRepository,
-        MealTransformer $mealTransformer
+        MealTransformer $mealTransformer,
+        PaginatorService $paginator
         )
     {
         $this->mealRepository = $mealRepository;
         $this->mealTransformer = $mealTransformer;
+        $this->paginator = $paginator;
     } 
 
     public function getMeals(array $parameters)
@@ -29,13 +33,15 @@ final class MealService
         $parameters['with'] = $this->_configureWithParameters($parameters['with'] ?? null);
 
         $query = $this->mealRepository->getMealsByCriteria($parameters);
-        // $pagination = $this->paginator->paginate($query);
-        $paginator = $this->_paginate($query);
-        $totalItems = (int) $paginator['total'];
+        $pagination = $this->paginator->paginate($query);
+        $totalItems = (int) $pagination['total'];
+
+        //$paginator = $this->_paginate($query);
+        //$totalItems = (int) $paginator['total'];
 
         $itemsPerPage = $parameters['limit'] ?? $totalItems;
 
-        $transformedMeals = $this->mealTransformer->transformMeals($paginator['dataAsArray']);
+        $transformedMeals = $this->mealTransformer->transformMeals($pagination['dataAsArray']);
 
         $data['meta']['currentPage'] = $parameters['page'] ?? null;
         $data['meta']['totalItems'] = $totalItems;
