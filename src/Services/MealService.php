@@ -33,6 +33,7 @@ final class MealService
         $parameters['with'] = $this->_configureWithParameters($parameters['with'] ?? null);
 
         $query = $this->mealRepository->getMealsByCriteria($parameters);
+        
         $pagination = $this->paginator->paginate($query);
         $totalItems = (int) $pagination['total'];
 
@@ -52,7 +53,7 @@ final class MealService
         return $data;
     }
 
-    private function _paginate($query)
+    /*private function _paginate($query)
     {
         $paginator = new Paginator($query);
         $result['data'] = $paginator->getIterator();
@@ -60,7 +61,7 @@ final class MealService
         $result['total'] = $paginator->count();
 
         return $result;
-    }
+    }*/
 
     private function _configureWithParameters(?string $param = null) : ?array
     {
@@ -68,6 +69,7 @@ final class MealService
         if ($param === null){
            return []; 
         }
+        //dd(explode(',', $param));
         return explode(',', $param);
     }
 }

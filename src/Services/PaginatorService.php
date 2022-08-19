@@ -12,7 +12,7 @@ final class PaginatorService
         $result['data'] = $paginator->getIterator();
         $result['dataAsArray'] = $result['data']->getArrayCopy(); 
         $result['total'] = $paginator->count();
-
+        //dd($result);
         return $result;
     }
 }

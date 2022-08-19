@@ -50,6 +50,7 @@ class ContentFixtures extends Fixture implements DependentFixtureInterface
             $content->setDescription('Meal '.$meal->getId().' Description');
             $content->setFqcn(Meal::class);
             $content->setLanguageId(1);
+            $content->setLanguageIsoCode('en');
             
             $data = [1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3];
             $mealData = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
@@ -79,6 +80,7 @@ class ContentFixtures extends Fixture implements DependentFixtureInterface
             $content->setDescription('Jelo '.$meal->getId().' Opis HR');
             $content->setFqcn(Meal::class);
             $content->setLanguageId(2);
+            $content->setLanguageIsoCode('hr');
 
             $data = [1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3];
             $mealData = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
@@ -110,6 +112,7 @@ class ContentFixtures extends Fixture implements DependentFixtureInterface
             $content->setTitle('Category '.$category->getId().' EN');
             $content->setFqcn(Category::class);
             $content->setLanguageId(1);
+            $content->setLanguageIsoCode('en');
 
             $data = [0, 1, 2, 3];
             $i++;
@@ -130,6 +133,7 @@ class ContentFixtures extends Fixture implements DependentFixtureInterface
             $content->setTitle('Kategorija '.$category->getId().' HR');
             $content->setFqcn(Category::class);
             $content->setLanguageId(2);
+            $content->setLanguageIsoCode('hr');
 
             $data = [0, 1, 2, 3];
             $i++;
@@ -152,6 +156,7 @@ class ContentFixtures extends Fixture implements DependentFixtureInterface
             $content->setTitle('Tag '.$tag->getId().' EN');
             $content->setFqcn(Tag::class);
             $content->setLanguageId(1);
+            $content->setLanguageIsoCode('en');
 
             $data = [0, 1, 2, 3];
             $i++;
@@ -172,6 +177,7 @@ class ContentFixtures extends Fixture implements DependentFixtureInterface
             $content->setTitle('Tag '.$tag->getId().' HR');
             $content->setFqcn(Tag::class);
             $content->setLanguageId(2);
+            $content->setLanguageIsoCode('hr');
 
             $data = [0, 1, 2, 3];
             $i++;
@@ -194,6 +200,7 @@ class ContentFixtures extends Fixture implements DependentFixtureInterface
             $content->setTitle('Ingridient '.$ingridient->getId().' EN');
             $content->setFqcn(Ingridient::class);
             $content->setLanguageId(1);
+            $content->setLanguageIsoCode('en');
 
             $data = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18];
             $i++;
@@ -214,6 +221,7 @@ class ContentFixtures extends Fixture implements DependentFixtureInterface
             $content->setTitle('Ingridient '.$ingridient->getId().' HR');
             $content->setFqcn(Ingridient::class);
             $content->setLanguageId(2);
+            $content->setLanguageIsoCode('hr');
 
             $data = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18];
             $i++;

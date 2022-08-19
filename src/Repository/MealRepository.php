@@ -40,7 +40,9 @@ class MealRepository extends ServiceEntityRepository
            ->orderBy('m.id', 'ASC');
 
         if (isset($parameters['lang'])) {
-            $qb->andWhere('con.languageId = :lang')
+            /*$qb->andWhere('con.languageId = :lang')
+            ->setParameter('lang', $parameters['lang']);*/
+            $qb->andWhere('con.languageIsoCode = :lang')
             ->setParameter('lang', $parameters['lang']);
         }
         
@@ -57,7 +59,9 @@ class MealRepository extends ServiceEntityRepository
             }
             
             $qb->andWhere('cat.id = cont.entityId')
-               ->andWhere('cont.languageId = :lang')
+               /*->andWhere('cont.languageId = :lang')
+               ->setParameter('lang', $parameters['lang']);*/
+               ->andWhere('cont.languageIsoCode = :lang')
                ->setParameter('lang', $parameters['lang']);
 
         }
@@ -75,7 +79,9 @@ class MealRepository extends ServiceEntityRepository
             }
 
             $qb->andWhere('tag.id = conte.entityId')
-               ->andWhere('conte.languageId = :lang')
+               /*->andWhere('conte.languageId = :lang')
+               ->setParameter('lang', $parameters['lang']);*/
+               ->andWhere('cont.languageIsoCode = :lang')
                ->setParameter('lang', $parameters['lang']);
         }
 
@@ -85,7 +91,9 @@ class MealRepository extends ServiceEntityRepository
                $qb->leftJoin('ing.contents', 'content')
                ->addSelect('content')
                ->andWhere('ing.id = content.entityId')
-               ->andWhere('content.languageId = :lang')
+               /*->andWhere('content.languageId = :lang')
+               ->setParameter('lang', $parameters['lang']);*/
+               ->andWhere('cont.languageIsoCode = :lang')
                ->setParameter('lang', $parameters['lang']);
         }
         

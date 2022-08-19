@@ -44,6 +44,11 @@ class Content
      */
     private $languageId;
 
+     /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $languageIsoCode;
+
     /**
      * @ORM\ManyToMany(targetEntity=Tag::class, inversedBy="contents")
      */
@@ -139,6 +144,18 @@ class Content
     public function setLanguageId(int $languageId): self
     {
         $this->languageId = $languageId;
+
+        return $this;
+    }
+
+    public function getLanguageIsoCode(): ?string
+    {
+        return $this->languageIsoCode;
+    }
+
+    public function setLanguageIsoCode(string $languageIsoCode): self
+    {
+        $this->languageIsoCode = $languageIsoCode;
 
         return $this;
     }
