@@ -11,7 +11,8 @@ final class MealTransformer
         foreach ($meals as $key => $meal) {
             $data[$key]['id'] = $meal['id'];    
             $data[$key]['title'] = $meal['title'];    
-            $data[$key]['description'] = $meal['description']; 
+            $data[$key]['description'] = $meal['description'];
+            $data[$key]['status'] = $meal['createdAt']; 
             
             if (isset($meal[0]['category'][0])) {
                 $data[$key]['category']['id'] = $meal[0]['category'][0]['id'];  
