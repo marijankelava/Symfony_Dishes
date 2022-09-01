@@ -42,7 +42,7 @@ final class MealService
 
         $itemsPerPage = $parameters['limit'] ?? $totalItems;
 
-        $transformedMeals = $this->mealTransformer->transformMeals($pagination['dataAsArray']);
+        $transformedMeals = $this->mealTransformer->transformMeals($pagination['dataAsArray'], $parameters);
 
         $data['meta']['currentPage'] = $parameters['page'] ?? null;
         $data['meta']['totalItems'] = $totalItems;

@@ -36,7 +36,7 @@ class MealRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('m');
 
         $qb->leftJoin('m.contents', 'con')
-           ->addSelect('m.id, m.createdAt, con.title, con.description')
+           ->addSelect('m.id, m.createdAt, m.updatedAt, m.deletedAt, con.title, con.description')
            ->orderBy('m.id', 'ASC');
 
         if (isset($parameters['lang'])) {

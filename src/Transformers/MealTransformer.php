@@ -2,9 +2,9 @@
 
 namespace App\Transformers;
 
-final class MealTransformer 
+final class MealTransformer
 {
-    public function transformMeals(array $meals) : array
+    public function transformMeals(array $meals, $parameters) : array
     {
         $y = 0;
         $data = [];
@@ -12,7 +12,35 @@ final class MealTransformer
             $data[$key]['id'] = $meal['id'];    
             $data[$key]['title'] = $meal['title'];    
             $data[$key]['description'] = $meal['description'];
-            $data[$key]['status'] = $meal['createdAt']; 
+            //$data[$key]['created'] = $meal['createdAt'];
+            
+            $diff_time = $parameters['diff_time'];
+
+            if (isset($meal['deletedAt'])) {
+                $deletedTime = $meal['deletedAt']->format('U');
+            } else {
+                $deletedTime = null;
+            } 
+            
+            if(isset($meal['updatedAt'])) {
+                $updatedTime = $meal['updatedAt']->format('U');
+            } else {
+                $updatedTime = null;
+            }
+            
+            if ($diff_time > $updatedTime && $updatedTime == !null) {
+                $data[$key]['status'] = 'updated';
+            } elseif ($diff_time > $deletedTime && $deletedTime == !null) {
+                $data[$key]['status'] = 'deleted';
+            } else {
+                $data[$key]['status'] = 'created';
+            }
+            
+            //if(isset($meal['deletedAt']) && !'NULL' ? $deletedTime = $meal['deletedAt']->format('U') : null );
+
+            //if(isset($meal['updatedAt']) && !'NULL' ? $updatedTime = $meal['updatedAt']->format('U') : null);
+
+            //if ($deletedTime > $diff_time ? $data[$key]['status'] = 'updated' : null);
             
             if (isset($meal[0]['category'][0])) {
                 $data[$key]['category']['id'] = $meal[0]['category'][0]['id'];  

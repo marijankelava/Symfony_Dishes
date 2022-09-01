@@ -76,7 +76,7 @@ class MealsController extends AbstractController
     public function getMeals(Request $request) : JsonResponse
     {   
         $parameters = $request->query->all();
-
+        //dd($parameters);
         $errors = $this->requestValidatorService->validateRequest($parameters);
         //dd($errors);
         $data = $this->mealService->getMeals($parameters);

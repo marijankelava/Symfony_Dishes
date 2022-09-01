@@ -22,7 +22,10 @@ final class RequestValidatorService
     public function validateRequest($parameters) :Response
     {
         $requestDto = new RequestDto();
-        $requestDto->setLang($parameters['lang']);
+
+        if (isset($parameters['lang'])) {
+            $requestDto->setLang($parameters['lang']);
+        }
 
         $errors = $this->validatorInterface->validate($requestDto);
 
@@ -36,11 +39,7 @@ final class RequestValidatorService
 
             //return $response->setContent('Lang parameter should not be empty');
         }
-    return new Response('The language is valid! Yes!');
-    }
 
-    public function getRequestParameters(Request $request) : array
-    {
-        return $parameters = $request->query->all();
+        return new Response('The language is valid! Yes!');
     }
 }
