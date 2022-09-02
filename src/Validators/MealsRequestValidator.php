@@ -17,7 +17,7 @@ final class MealsRequestValidator
         $this->validatorInterface = $validatorInterface;
     }
 
-    public function validateRequest($parameters) :Response
+    public function validateRequest($parameters) : Response
     {
         $requestDto = new MealsRequestDto();
 

@@ -24,7 +24,7 @@ final class MealService
         $this->paginator = $paginator;
     } 
 
-    public function getMeals(array $parameters)
+    public function getMeals(array $parameters) : array
     {
         $parameters['limit'] = isset($parameters['per_page']) ? (int) $parameters['per_page'] : null;
         $parameters['offset'] = isset($parameters['page']) && $parameters['limit'] !== null ? ((int) $parameters['page'] - 1) * $parameters['limit'] : null;        

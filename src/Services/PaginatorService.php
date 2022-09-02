@@ -6,7 +6,7 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 
 final class PaginatorService
 {
-    public function paginate($query)
+    public function paginate($query) : array
     {
         $paginator = new Paginator($query);
         $result['data'] = $paginator->getIterator();
