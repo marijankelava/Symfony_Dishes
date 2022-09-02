@@ -21,7 +21,7 @@ final class Retrieve extends AbstractController
     }
 
     /**
-     * @Route("/api/meals", name="show", methods={"GET"})
+     * @Route("/meals/v1", name="show", methods={"GET"})
      */
     public function getMeals(Request $request) : JsonResponse
     {   
