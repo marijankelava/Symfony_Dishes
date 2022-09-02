@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Repository\MealRepository;
 use App\Transformers\MealTransformer;
-use Doctrine\ORM\Tools\Pagination\Paginator;
 use App\Services\PaginatorService;
 
 final class MealService 
@@ -52,16 +51,6 @@ final class MealService
 
         return $data;
     }
-
-    /*private function _paginate($query)
-    {
-        $paginator = new Paginator($query);
-        $result['data'] = $paginator->getIterator();
-        $result['dataAsArray'] = $result['data']->getArrayCopy(); 
-        $result['total'] = $paginator->count();
-
-        return $result;
-    }*/
 
     private function _configureWithParameters(?string $param = null) : ?array
     {

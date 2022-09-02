@@ -3,10 +3,8 @@
 namespace App\Validators;
 
 use App\Dto\MealsRequestDto;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
 
 final class MealsRequestValidator 
 {
