@@ -3,7 +3,6 @@
 namespace App\Validators;
 
 use App\Dto\MealsRequestDto;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 final class MealsRequestValidator 
@@ -17,7 +16,7 @@ final class MealsRequestValidator
         $this->validatorInterface = $validatorInterface;
     }
 
-    public function validateRequest($parameters) : Response
+    public function validateRequestParameters($parameters) : ?array
     {
         $requestDto = new MealsRequestDto();
 
@@ -28,16 +27,12 @@ final class MealsRequestValidator
         $errors = $this->validatorInterface->validate($requestDto);
 
         if (count($errors) > 0) {
-        
-            $errorsString = (string) $errors;
-            
-            $response = new Response($errorsString);
-
-            die('Lang parameter should not be empty');
-
-            //return $response->setContent('Lang parameter should not be empty');
+            $errorList = [];
+            foreach ($errors as $error) {
+                $errorList[$error->getPropertyPath()] = $error->getMessage();
+            }
+            return $errorList;
         }
-
-        return new Response('The language is valid! Yes!');
+        return null;
     }
 }
