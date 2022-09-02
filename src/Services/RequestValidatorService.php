@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Services\RequestDto;
+use App\Services\MealsRequestDto;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -21,7 +21,7 @@ final class RequestValidatorService
 
     public function validateRequest($parameters) :Response
     {
-        $requestDto = new RequestDto();
+        $requestDto = new MealsRequestDto();
 
         if (isset($parameters['lang'])) {
             $requestDto->setLang($parameters['lang']);

@@ -6,7 +6,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
-final class RequestDto
+final class MealsRequestDto
 {
     /**
      * @Assert\NotBlank
