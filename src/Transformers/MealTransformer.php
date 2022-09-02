@@ -14,8 +14,8 @@ final class MealTransformer
             $data[$key]['description'] = $meal['description'];
             //$data[$key]['created'] = $meal['createdAt'];
             
-            $diff_time = $parameters['diff_time'];
-
+            $diff_time = isset($parameters['diff_time']) ? $parameters['diff_time'] : null;
+            //dd($diff_time);
             if (isset($meal['deletedAt'])) {
                 $deletedTime = $meal['deletedAt']->format('U');
             } else {

@@ -38,39 +38,6 @@ class MealsController extends AbstractController
     }
 
     /**
-     * @Route("/meals", name="meals", defaults={"name" = null}, methods={"GET", "HEAD"})
-     */
-    public function index(Request $request): Response
-    {
-        $parameters = $request->query->all();
-
-        $meals = $this->mealRepository->getAllMeals();
-
-        //$meals = $this->contentRepository->findBy(["fqcn" => "App\Entity\Meal"]);
-        //$categories = $this->contentRepository->showCategories();
-        $categories = [];
-        return $this->render('meal/index.html.twig', [
-            'categories' => $categories,
-            'meals' => $meals
-        ]);
-    }
-
-    /**
-     * @Route("/meal/{id}", name="meal", methods={"GET"})
-     */
-    public function showMeal($id): Response
-    {
-        $meal = $this->contentRepository->find($id);
-        //$categories = $this->categoryRepository->findBy();
-        $categories = [];
-
-        return $this->render('meal/show.html.twig', [
-            'categories' => $categories,
-            'meal' => $meal
-        ]);
-    }
-
-    /**
      * @Route("/api/meals", name="show", methods={"GET"})
      */
     public function getMeals(Request $request) : JsonResponse
@@ -83,43 +50,4 @@ class MealsController extends AbstractController
         dd($data);
         return $this->json($data);
     }
-
-    /**
-     * @Route("api/meals/category", name="category", methods={"GET"})
-     */
-    /*public function getMealsByCategory(Request $request): JsonResponse
-    {
-        $parameters = $request->query->all();
-
-        $categories = [];
-        if (isset($parameters['category'])) {
-            $categoryId = explode(',', $parameters['category']);
-            $categories = $this->mealRepository->getMealsByCategory($parameters, $categoryId);  
-        }
-        dd($categories);
-
-        return $this->render('meal/show.html.twig', [
-            'categories' => $categories,
-            'meal' => $meal
-        ]);
-    }*/
-
-    /**
-     * @Route("api/meals/tags", name="tags", methods={"GET"})
-     */
-    /*public function getMealsByTags(Request $request): JsonResponse
-    {
-        $parameters = $request->query->all();
-
-        $tags = [];
-        if (isset($parameters['tags'])) {
-            $tagId = explode(',', $parameters['tags']);
-            $tags = $this->mealRepository->getMealsByTags($parameters, $tagId);  
-        }
-        dd($tags);
-        return $this->render('meal/show.html.twig', [
-            'categories' => $categories,
-            'meal' => $meal
-        ]);
-    }*/
 }
