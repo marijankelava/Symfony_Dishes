@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Services;
+namespace App\Validators;
 
-use App\Services\MealsRequestDto;
+use App\Dto\MealsRequestDto;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-final class RequestValidatorService 
+final class MealsRequestValidator 
 {
     private ValidatorInterface $validatorInterface;
 

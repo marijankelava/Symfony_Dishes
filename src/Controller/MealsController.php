@@ -13,28 +13,28 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Services\ValidatorService;
-use App\Services\RequestValidatorService;
+use App\Validators\MealsRequestValidator;
 
 class MealsController extends AbstractController
 {
     private ContentRepository $contentRepository;
     private MealService $mealService;
     private IngridientRepository $ingridientRepository;
-    private RequestValidatorService $requestValidatorService;
+    private MealsRequestValidator $mealsRequestValidator;
 
     public function __construct(
         MealRepository $mealRepository, 
         ContentRepository $contentRepository, 
         MealService $mealService,
         IngridientRepository $ingridientRepository,
-        RequestValidatorService $requestValidatorService
+        MealsRequestValidator $mealsRequestValidator
         )
     {
         $this->mealRepository = $mealRepository;
         $this->contentRepository = $contentRepository;
         $this->mealService = $mealService;
         $this->ingridientRepository = $ingridientRepository;
-        $this->requestValidatorService = $requestValidatorService;
+        $this->mealsRequestValidator = $mealsRequestValidator;
     }
 
     /**
@@ -44,7 +44,7 @@ class MealsController extends AbstractController
     {   
         $parameters = $request->query->all();
         //dd($parameters);
-        $errors = $this->requestValidatorService->validateRequest($parameters);
+        $errors = $this->mealsRequestValidator->validateRequest($parameters);
         //dd($errors);
         $data = $this->mealService->getMeals($parameters);
         dd($data);

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Dto;
 
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\Response;
