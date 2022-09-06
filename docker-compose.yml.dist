@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  symfony_app1_db:
+  symfony_dishes_db:
     image: mysql:5.7
     command: --default-authentication-plugin=mysql_native_password
     restart: always
@@ -12,11 +12,11 @@ services:
       MYSQL_PASSWORD: 'user'
     ports:
       - 3333:3306
-    container_name: symfony_app1_db
+    container_name: symfony_dishes_db
     networks:
-      - symfony_app1_rest
+      - symfony_dishes_rest
 
-  symfony_app1_web:
+  symfony_dishes_web:
     build:
       context: .docker-config/web
     volumes:
@@ -24,18 +24,18 @@ services:
       - './.docker-config/web/vhost.conf:/etc/apache2/sites-available/000-default.conf'
     ports:
       - 8888:80
-    container_name: symfony_app1_web
+    container_name: symfony_dishes_web
     networks:
-      - symfony_app1_rest
+      - symfony_dishes_rest
 
   symfony_adminer:
     image: adminer
     ports:
       - 9999:8080
-    container_name: symfony_app1_adm
+    container_name: symfony_dishes_adm
     networks:
-      - symfony_app1_rest
+      - symfony_dishes_rest
 
 networks:
-  symfony_app1_rest:
-    name: symfony_app1_rest
+  symfony_dishes_rest:
+    name: symfony_dishes_rest
