@@ -16,6 +16,11 @@ final class MealsRequestDto
      */
     private string $per_page;
 
+     /**
+     * @Assert\Type(type="digit")
+     */
+    private string $page;
+
 
     public function setLang(string $lang): self
     {
@@ -27,6 +32,13 @@ final class MealsRequestDto
     public function setPer_page(string $per_page): self
     {
         $this->per_page = $per_page;
+
+        return $this;
+    }
+
+    public function setPage(string $page): self
+    {
+        $this->page = $page;
 
         return $this;
     }

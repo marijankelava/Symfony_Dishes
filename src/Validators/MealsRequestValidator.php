@@ -34,6 +34,10 @@ final class MealsRequestValidator
             $requestDto->setPer_page($parameters['per_page']);
         }
 
+        if (isset($parameters['page'])) {
+            $requestDto->setPer_page($parameters['page']);
+        }
+
         $errors = $this->validatorInterface->validate($requestDto);
 
         if (count($errors) > 0) {
