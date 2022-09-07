@@ -20,6 +20,8 @@ Checkout to master branch
     `php bin/console do:sc:dr --force`,
     `php bin/console do:sc:cr`
 
+- to load fixtures:
+    `php bin/console do:fi:lo`
 
 ## Default database credentials:
  - server: symfony_dishes_db
@@ -27,8 +29,10 @@ Checkout to master branch
  - password: user
  - database: db
 
-## Request URL
+## Request URL example
 http://localhost:8888/meals/v1?per_page=10&page=1&lang=hr&with=category,tags,ingridients&diff_time=1987654321
+
+http://localhost:8888/meals/v1?per_page=10&page=1&lang=en&with=category,tags,ingridients&diff_time=1987654321
 
 ## Sample Response
 JSON

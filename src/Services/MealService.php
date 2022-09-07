@@ -40,6 +40,7 @@ final class MealService
         }
 
         $parameters['limit'] = isset($parameters['per_page']) ? (int) $parameters['per_page'] : null;
+        
         $parameters['offset'] = isset($parameters['page']) && $parameters['limit'] !== null ? ((int) $parameters['page'] - 1) * $parameters['limit'] : null;        
 
         $parameters['with'] = $this->_configureWithParameters($parameters['with'] ?? null);
@@ -48,11 +49,13 @@ final class MealService
         
         $pagination = $this->paginator->paginate($query);
         $totalItems = (int) $pagination['total'];
-
+        
         $itemsPerPage = $parameters['limit'] ?? $totalItems;
+        
+        //$itemsPerPage = $parameters['limit'] ? : (int) 10 ;
 
         $transformedMeals = $this->mealTransformer->transformMeals($pagination['dataAsArray'], $parameters);
-        //dd($itemsPerPage);
+        
         $data['meta']['currentPage'] = $parameters['page'] ?? null;
         $data['meta']['totalItems'] = $totalItems;
         $data['meta']['itemsPerPage'] = $itemsPerPage;
