@@ -23,12 +23,6 @@ final class MealsRequestValidator
         if (isset($parameters['lang'])) {
             $requestDto->setLang($parameters['lang']);
         }
-        
-        /*if (isset($parameters['per_page'])) {
-            $per_page = (int) $parameters['per_page'];
-            var_dump($per_page);
-            $requestDto->setPer_page($per_page);
-        }*/
 
         if (isset($parameters['per_page'])) {
             $requestDto->setPer_page($parameters['per_page']);
