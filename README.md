@@ -34,10 +34,6 @@ http://localhost:8888/meals/v1?per_page=10&page=1&lang=hr&with=category,tags,ing
 
 http://localhost:8888/meals/v1?per_page=10&page=1&lang=en&with=category,tags,ingridients&diff_time=1987654321
 
-## Sample Response
-JSON
-{ "type": "cicrcle", "radius": "3" "circumference": "12" "area": "10" }
-
 
 
 
