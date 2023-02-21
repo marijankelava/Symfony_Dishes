@@ -13,6 +13,7 @@ class HomeController extends AbstractController
 {
     private $mealRepository;
     private $categoryRepository;
+    private $contentRepository;
 
     public function __construct(
         MealRepository $mealRepository, 

@@ -44,7 +44,7 @@ final class MealService
         $parameters['offset'] = isset($parameters['page']) && $parameters['limit'] !== null ? ((int) $parameters['page'] - 1) * $parameters['limit'] : null;        
 
         $parameters['with'] = $this->_configureWithParameters($parameters['with'] ?? null);
-
+        
         $query = $this->mealRepository->getMealsByCriteria($parameters);
         
         $pagination = $this->paginator->paginate($query);
